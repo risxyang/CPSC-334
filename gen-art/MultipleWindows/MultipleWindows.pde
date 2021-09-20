@@ -5,17 +5,24 @@ ChildApplet child2;
 ChildApplet child3;
 ChildApplet child4;
 ChildApplet child5;
+
+int sizeX = 768;
+int sizeY = 1360;
+int spawnX = 0;
+int spawnY = 0;
+
 //Arcball arcball, arcball2;  
 
 void settings() {
-  size(800 , 1200);
+  size(sizeX , sizeY);
   smooth();
 }
 
 void setup() {
   surface.setTitle("Main sketch");
-  surface.setResizable(true);
-  surface.setLocation(0, 0);
+  surface.setLocation(spawnX, spawnY);
+  spawnX += sizeX;
+  
   //arcball = new Arcball(this);
   child1 = new ChildApplet();
   child2 = new ChildApplet();
@@ -25,7 +32,7 @@ void setup() {
 }
 
 void draw() {
-   arcball.run();
+   //arcball.run();
 
 }
 
@@ -39,11 +46,13 @@ class ChildApplet extends PApplet {
   }
 
   public void settings() {
-    size(800, 1200);
+    size(sizeX, sizeY);
     smooth();
   }
   public void setup() { 
     surface.setTitle("Child sketch");
+    surface.setLocation(spawnX, spawnY);
+    spawnX += sizeX;
     //arcball2 = new Arcball(this);
   }
 
