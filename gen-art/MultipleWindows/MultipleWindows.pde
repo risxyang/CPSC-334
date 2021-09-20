@@ -11,7 +11,9 @@ int sizeY = 1360;
 int spawnX = 0;
 int spawnY = 0;
 
-//Arcball arcball, arcball2;  
+Window[] windows = new Window[6];
+int windex = 0;
+PImage img0; 
 
 void settings() {
   size(sizeX , sizeY);
@@ -22,8 +24,11 @@ void setup() {
   surface.setTitle("Main sketch");
   surface.setLocation(spawnX, spawnY);
   spawnX += sizeX;
+  img0 = loadImage("hand/"+str(1)+".jpeg");
+  image(img0,0,0);
   
-  //arcball = new Arcball(this);
+  windows[windex] = new Window(this);
+  windex += 1;
   child1 = new ChildApplet();
   child2 = new ChildApplet();
   child3 = new ChildApplet();
@@ -33,13 +38,16 @@ void setup() {
 
 void draw() {
    //arcball.run();
+   image(img0, 0, height/5, img0.width/5, img0.height/5);
+   
 
 }
 
 
 class ChildApplet extends PApplet {
-  //JFrame frame;
 
+  PImage img; 
+  
   public ChildApplet() {
     super();
     PApplet.runSketch(new String[]{this.getClass().getName()}, this);
@@ -53,12 +61,28 @@ class ChildApplet extends PApplet {
     surface.setTitle("Child sketch");
     surface.setLocation(spawnX, spawnY);
     spawnX += sizeX;
-    //arcball2 = new Arcball(this);
+    //img = loadImage("hand/"+str(2)+".jpeg");
+    //image(img,0,0);
+    windows[windex] = new Window(this);
+    windex += 1;
+    
   }
 
   public void draw() {
     //arcball2.run();
-    background(0);
+    //background(0);
+    for(int i = 10; i < width; i += 10) {
+  // If 'i' divides by 20 with no remainder draw 
+  // the first line, else draw the second line
+  if((i % 20) == 0) {
+    stroke(255);
+    line(i, 80, i, height/2);
+  } else {
+    stroke(153);
+    line(i, 20, i, 180); 
+  }
+}
+    
 
   }
 
