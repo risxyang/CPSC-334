@@ -62,21 +62,33 @@ void setup() {
 
 void draw() {
   
+  //pick random pixel center random width
+  PImage si = sorted_imgs.get(0);
+  si.loadPixels();
+  noStroke();
+  int xr = (int)random(1, sizeX);
+  int yr = (int)random(1, sizeY);
+  int w = (int)random(1, sizeX/2);
+  int h = (int)random(1, sizeY/2);
+  color col = si.get(xr, yr);
+  fill(col);
+  rect(xr, yr, w, h);
+  
   //println(frameRate);
   loadPixels();
   //pixellize by 10pixel squares
-  PImage si = sorted_imgs.get(0);
+  //PImage si = sorted_imgs.get(0);
   si.loadPixels();
   float r_sum, g_sum, b_sum;
   float r_avg, g_avg, b_avg;
-  if (y < si.height - 16){
-    while(x < si.width - 16){
-      //println(x,si.width);
+  if (y < si.height - 8){
+    while(x < si.width - 8){
+      println(x,si.width);
       r_sum = g_sum = b_sum = 0.0;
       r_avg = g_avg = b_avg = 0.0;
-      for (int a = x; a < x+16; a += 1)
+      for (int a = x; a < x+8; a += 1)
       {
-        for (int c = y; c < y+16; c+=1)
+        for (int c = y; c < y+8; c+=1)
         {
            int loc = a + c*si.width;
            float r = red(si.pixels[loc]);
@@ -89,18 +101,19 @@ void draw() {
         }
       }
       
-      r_avg = r_sum / 256;
-      g_avg = g_sum / 256;
-      b_avg = b_sum / 256;
+      r_avg = r_sum / 64;
+      g_avg = g_sum / 64;
+      b_avg = b_sum / 64;
       
+      //color c = sky.get(240, 360);
       noStroke();
       fill(r_avg, g_avg, b_avg);
-      rect(x, y, 16, 16);
+      rect(x, y, 8, 8);
 
-      x += 16;
+      x += 8;
     }
       
-   y += 16;
+   y += 8;
    x = 0;
   }
   
