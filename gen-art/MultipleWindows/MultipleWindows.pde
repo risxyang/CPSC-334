@@ -1,4 +1,3 @@
-// Based on code by GeneKao (https://github.com/GeneKao)
 
 ChildApplet child1;
 ChildApplet child2;
@@ -13,8 +12,6 @@ int spawnY = 0;
 
 ArrayList<PImage> imgs;
 
-
-Window[] windows = new Window[6];
 int windex = 0;
 
 void settings() {
@@ -37,7 +34,6 @@ void setup() {
     
   }
 
-  windows[windex] = new Window(this);
   windex += 1;
   child1 = new ChildApplet();
   child2 = new ChildApplet();
@@ -77,7 +73,6 @@ class ChildApplet extends PApplet {
     PImage currImg = imgs.get(windex);
     image(currImg,0,0);
     image(currImg,0,0, currImg.width / 4, currImg.height / 4);
-    windows[windex] = new Window(this);
     windex += 1;
     
   }
