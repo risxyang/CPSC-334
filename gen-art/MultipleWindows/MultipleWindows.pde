@@ -9,6 +9,8 @@ int sizeX = 768;
 int sizeY = 1360;
 int spawnX = 0;
 int spawnY = 0;
+int x = 0;
+int y = 0;
 
 ArrayList<PImage> imgs;
 ArrayList<PImage> sorted_imgs;
@@ -37,9 +39,7 @@ void setup() {
      pi.filter(GRAY);
      // pi.filter(THRESHOLD,0.5);
     imgs.add(pi);
-    PImage sorted = createImage(pi.width, pi.height, RGB);
-    sorted = pi.get();
-    sorted_imgs.add(sorted);
+    
     
   }
 
@@ -53,25 +53,30 @@ void setup() {
   PImage currImg = imgs.get(0);
   image(currImg,0,0);
   image(currImg,0,0, currImg.width / 4, currImg.height / 4);
+  
+  PImage sorted = createImage(currImg.width, currImg.height, RGB);
+  sorted = currImg.get();
+  sorted.resize(currImg.width / 4, currImg.height / 4);
+  sorted_imgs.add(sorted);
 }
 
 void draw() {
   
-  println(frameRate);
+  //println(frameRate);
   loadPixels();
   //pixellize by 10pixel squares
   PImage si = sorted_imgs.get(0);
   si.loadPixels();
   float r_sum, g_sum, b_sum;
   float r_avg, g_avg, b_avg;
-  for (int y = 0; y < si.height; y+= 8) {
-    for (int x = 0; x < si.width; x+= 8) {
-      println(x,y);
+  if (y < si.height - 16){
+    while(x < si.width - 16){
+      //println(x,si.width);
       r_sum = g_sum = b_sum = 0.0;
       r_avg = g_avg = b_avg = 0.0;
-      for (int a = x; a < x+8; a += 1)
+      for (int a = x; a < x+16; a += 1)
       {
-        for (int c = y; c < y+8; c+=1)
+        for (int c = y; c < y+16; c+=1)
         {
            int loc = a + c*si.width;
            float r = red(si.pixels[loc]);
@@ -84,34 +89,29 @@ void draw() {
         }
       }
       
-      r_avg = r_sum / 64;
-      g_avg = g_sum / 64;
-      b_avg = b_sum / 64;
+      r_avg = r_sum / 256;
+      g_avg = g_sum / 256;
+      b_avg = b_sum / 256;
       
-      
-      
-     for (int a = x; a < x+8; a += 1)
-      {
-        for (int c = y; c < y+8; c+=1)
-        {
-          int loc = a + c*si.width;
-          si.pixels[loc] =  color(r_avg,g_avg,b_avg);
-        }
-     }
-      
-    }
-    
+      noStroke();
+      fill(r_avg, g_avg, b_avg);
+      rect(x, y, 16, 16);
 
+      x += 16;
+    }
+      
+   y += 16;
+   x = 0;
   }
   
   //PImage si = sorted_imgs.get(0);
   //si.loadPixels();
 
-  si.updatePixels();
-  sorted_imgs.set(0,si);
-  image(si, 0,0, si.width / 4, si.height / 4);
-  updatePixels();
-
+  //si.updatePixels();
+  //sorted_imgs.set(0,si);
+  //image(si, 0,0, si.width / 4, si.height / 4);
+  //updatePixels();
+  
 }
 
 
