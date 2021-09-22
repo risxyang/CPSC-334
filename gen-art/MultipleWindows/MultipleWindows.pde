@@ -14,8 +14,15 @@ int windex = 0;
 //sizeX = vertical height of image-to-be-projected ond desktop
 int sizeX = 1360; 
 int sizeY = 768;
+
+//vars to hold current spawn locations for windows as they are created
 int spawnX = 0;
 int spawnY = 0;
+
+//start location of the first window (after first desktop monitor)
+int startX = 1024;
+
+
 
  //x and y vars for iterating thru rows/cols
  int x = 0;
@@ -57,7 +64,7 @@ void setup() {
     PImage pi = loadImage("hand/"+str(i)+".jpeg");
     
      //filter images before adding them to imgs array list
-     //pi.filter(POSTERIZE,10);
+     //pi.filter(POSTERIZE,3);
      pi.filter(GRAY);
      // pi.filter(THRESHOLD,0.5);
     imgs.add(pi);
@@ -108,11 +115,11 @@ class ChildApplet extends PApplet {
     surface.setTitle("Child sketch");
     
     //spawn this window at the designated location, with the same interval of distance between each window
-    surface.setLocation(spawnX, spawnY);
+    surface.setLocation(spawnX + startX, spawnY);
     spawnX += sizeX;
 
     //load this img from imgs arraylist
-    println(cid);
+    //println(cid);
     PImage currImg = imgs.get(cid);
     
     xStartSmall = (int)random(0, sizeX / 3);
@@ -139,8 +146,8 @@ class ChildApplet extends PApplet {
   //same as parent -- set up random gradients
   int xr = (int)random(1, sizeX);
   int yr = (int)random(1, sizeY);
-  int w = (int)random(1, sizeX/4);
-  int h = (int)random(1, sizeY/4);
+  int w = (int)random(1, sizeX/8);
+  int h = (int)random(1, sizeY/8);
   int xr2 = (xr + w) % sizeX;
   int yr2 = (yr + h) % sizeY;
   color c1 = si.get(xr + xStartSmall, yr);
