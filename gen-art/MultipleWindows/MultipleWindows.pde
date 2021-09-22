@@ -17,9 +17,11 @@ int sizeY = 768;
 int spawnX = 0;
 int spawnY = 0;
 
-//x and y vars for iterating thru 
-int x = 0;
-int y = 0;
+ //x and y vars for iterating thru rows/cols
+ int x = 0;
+ int y = 0;
+
+
 
 //array list for holding loaded images (length 6 after all images are loaded)
 ArrayList<PImage> imgs;
@@ -48,7 +50,7 @@ void settings() {
 void setup() {
   //load all 6 images from the number of images available in the data folder; i am choosing from /hands/
   
-  int nImages = 15;
+  int nImages = 14;
   int starti = (int)random(0, nImages + 1);
   for(int i = starti; i < (starti + 6) % nImages + 1; i++)
   {
@@ -59,8 +61,6 @@ void setup() {
      pi.filter(GRAY);
      // pi.filter(THRESHOLD,0.5);
     imgs.add(pi);
-    
-    
   }
   
   //instantiate child applets
@@ -80,8 +80,16 @@ void draw() {
 
 class ChildApplet extends PApplet {
 
+  //vars for holding this child applet's loaded image, child applet ID
   PImage img;
-  int cid;
+  int cid = 0;
+  
+  ////x and y vars for iterating thru rows/cols
+  //int x = 0;
+  //int y = 0;
+  
+  //int var to hold the y value at which the small background image begins
+  int xStartSmall;
   
   public ChildApplet() {
     super();
@@ -89,7 +97,6 @@ class ChildApplet extends PApplet {
     
     //for retrieving images in the mod_images arraylist, handy to have a child id assoc with this child applet instance
     cid = windex;
-    println(cid, windex);
     windex += 1;
   }
 
@@ -104,11 +111,13 @@ class ChildApplet extends PApplet {
     surface.setLocation(spawnX, spawnY);
     spawnX += sizeX;
 
-    println(cid);
     //load this img from imgs arraylist
+    println(cid);
     PImage currImg = imgs.get(cid);
+    
+    xStartSmall = (int)random(0, sizeX / 3);
     image(currImg,0,0);
-    image(currImg,0,0, currImg.width / 4, currImg.height / 4);
+    image(currImg,xStartSmall,0, currImg.width / 4, currImg.height / 4);
     
     //save resized version of image in mod_imgs arraylist
     PImage mod = createImage(currImg.width, currImg.height, RGB);
@@ -121,7 +130,7 @@ class ChildApplet extends PApplet {
 
   public void draw() {
     
-  //println(cid);
+  println(cid);
   PImage si = mod_imgs.get(cid);
 
   si.loadPixels();
@@ -130,16 +139,21 @@ class ChildApplet extends PApplet {
   //same as parent -- set up random gradients
   int xr = (int)random(1, sizeX);
   int yr = (int)random(1, sizeY);
-  int w = (int)random(1, sizeX/8);
-  int h = (int)random(1, sizeY/8);
+  int w = (int)random(1, sizeX/4);
+  int h = (int)random(1, sizeY/4);
   int xr2 = (xr + w) % sizeX;
   int yr2 = (yr + h) % sizeY;
-  color c1 = si.get(xr, yr);
-  color c2 = si.get(xr2, yr2);
+  color c1 = si.get(xr + xStartSmall, yr);
+  color c2 = si.get(xr2 + xStartSmall, yr2);
   
   //noStroke();
-  setGradient(xr, yr, w, h, c1, c2, Y_AXIS);
-  setGradient(xr, yr, w, h, c1, c2, X_AXIS);
+  if(random(0,2) == 0) { 
+  setGradient(xr + xStartSmall, yr, w, h, c1, c2, Y_AXIS); 
+  }
+  else
+  {
+  setGradient(xr + xStartSmall, yr, w, h, c1, c2, X_AXIS);
+  }
   
   //PIXELLATION
   if (y >= si.height - 8)
@@ -176,8 +190,17 @@ class ChildApplet extends PApplet {
       b_avg = b_sum / 64;
       
       noStroke();
-      fill(r_avg, g_avg, b_avg);
-      rect(x, y, 8, 8);
+      
+      if(random(0,1000) <= 1)
+      {
+        int r = (int)random(0,256);
+        fill(color(r, r, r));
+      }
+      else
+      {
+        fill(r_avg, g_avg, b_avg);
+      }
+      rect(x + xStartSmall, y, 8, 8);
       
       x += 8;
     }
@@ -189,6 +212,7 @@ class ChildApplet extends PApplet {
   float chance = random(0, 100);
   if (chance < 5){
     image(si, random(0, sizeX), random(0,sizeY), random(10, si.width / 10), random(10, si.height / 10));
+    rotate(0.2);  
   }
   
 
