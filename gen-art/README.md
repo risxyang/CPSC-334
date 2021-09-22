@@ -1,5 +1,7 @@
 ### Assignment 1 for CPSC 334: Creative Embedded Systems ###
 
+![image of projection in leeds studio](./img.jpg)
+
 Video Link: https://vimeo.com/611315005
 
 
