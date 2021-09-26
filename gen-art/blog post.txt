@@ -1,0 +1,14 @@
+Temporarily uploading this here, until I get a more permanent blog set up very soon ---
+
+In considering how to design a projection for this six-paneled space, I had to decide between creating continuity between panels (letting elements travel between them, possibly) and letting each panel be a separate element. At the same time, I was also considering what it might mean to make something generative -- to compose from a blank slate with a shape or color felt intimidating to me, and I gravitated towards the idea of starting with a photograph or a video, and using those existing frames as a basis for a decomposition into manipulable elements. Starting with something would entail taking the significance of those initial elements into account, which complicated things. 
+
+In my Animation course this semester, one recurring concept is the idea of the 'artist's hand' -- through which early animators enjoyed showing off in their works. Some early animations would start with an artist's hand penciling out / inking the first frame of the film, before the viewer 'enters' this drawn world. 
+
+We also talked about the massive amounts of creative (and often very physical) labor involved in creating complex works of art such as animation, and how this labor is often rendered invisible, or at least is not communicated by the final artistic product. 
+
+A week's planning for a single work of generative art is pretty far from a massive group endeavor like an animated film, but I was reminded of this idea of invisible handiwork when looking at the readings for this course -- live coders' work is seen as code on a screen, and the physical process of inputting code is not always visible to other people. 
+
+Programming a work of generative art feels pretty far from doing something with my hands -- and rendering clean shapes in processing also doesn't have a self-drawn quality; the concept of having any sort of individual 'style' through a language like processing will likely take years of practice. I guess my desire to start with a picture of my hand was a desire to have some part of these images feel organic to me. 
+
+Technical Issues -- 
+Measuring out the exact pixel locations and dimensions for each window of this projection was challenging! Diagramming things was extremely helpful, and I'm thankful we had to do this in part one of the assignment. Even forgetting a small detail in our initial diagram (the dimensions of the first desktop monitor, which does not have any digital pixels mapped to it), caused a minor inconvenience of having to re-check those values. 
