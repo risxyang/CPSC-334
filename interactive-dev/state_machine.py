@@ -21,7 +21,7 @@ j_sw_prevstate = 0
 val_x = 0
 val_y = 0
 
-def shutdown():
+def shutdown(): #exit program
 	print("Button pressed: exiting")
 	os._exit(0)
 
@@ -33,7 +33,7 @@ else:
 	s_prevstate = 1
 	print("Current State: 1: Started with switch on")
 
-while True: #change this eventually to exit program upon button being held in certain combo
+while True: 
 	if state == 0:
 		if s.value == 1 and s_prevstate != 1:
 			state = 1
@@ -55,8 +55,8 @@ while True: #change this eventually to exit program upon button being held in ce
 			print("Joystick locked")
 		elif j_y.value == 0 and j_y_prevstate != 0:
 			j_y_prevstate = 0 #mark j_y as having been released
-		else:
-			b.when_held = shutdown
+		else: #check if button's been held for specified number of seconds
+			b.when_held = shutdown #call shutdown function
 	elif state == 1:
 		if s.value == 0 and s_prevstate != 0:
 			state = 0
