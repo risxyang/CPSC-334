@@ -1,4 +1,4 @@
-#Assignment 1 Task 1#
+# Assignment 1 Task 1 #
 
 Settings for the switch and the momentary button will dictate the effect of toggling the joystick. 
 The joystick modifies the values of two global variables, x and y. These values are printed to the terminal any time they are modified. 
