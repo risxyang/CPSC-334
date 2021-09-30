@@ -1,6 +1,8 @@
 #!/bin/bash
 
+cd ~/Documents/CPSC-334/raspi-ip/
 hostname -I > ip.md
 git add ip.md
 git commit -m "new ip on startup"
 git push
+cd ..
