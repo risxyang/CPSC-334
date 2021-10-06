@@ -2,6 +2,7 @@ import processing.serial.*;
 Serial myPort;  // Create object from Serial class
 String val;     // Data received from the serial port
 import java.util.Arrays;
+import java.io.InputStreamReader;
 
 ArrayList<Integer> circleCentersX;
 ArrayList<Integer> circleCentersY;
@@ -16,12 +17,21 @@ int currIndex = 0;
 int jButtonPrev = 0;
 int mButtonPrev = 0;
 int mButtonHeld = 0;
+int switchPrev = 0;
+int switchOn = 0;
+
+String commandToRun;
+File workingDir;   // where to run this command, as full path
+String returnedValues;                        
   
   
 void setup()
 {
   String portName = "/dev/tty.SLAB_USBtoUART";
   myPort = new Serial(this, portName, 115200);
+  
+  commandToRun = "afplay /Users/christineyang/Documents/*F21/CES/PySynth/danube.wav";
+  workingDir = new File(sketchPath(""));
   
   n = 5;
   interval = displayWidth / (n + 1);
@@ -81,7 +91,20 @@ void draw()
       mButtonPrev = 0;
       mButtonHeld = 0;
     }
-  
+    
+    //switch control
+    if(input[4] == 1 && switchPrev != 1)
+    {
+      switchPrev = 1;
+      playSound();
+      
+    }
+    else if(input[4] == 0 && switchPrev != 0)
+    {
+      switchPrev = 0;
+      playSound();
+    }
+    
     radius = circleRadii.get(currIndex);
     hue = circleHues.get(currIndex);
     
@@ -185,4 +208,53 @@ int modifyByThresholds(float r, int x)
   }
   
  
+}
+
+void playSound()
+{  
+   // give us some info:
+  println("Running command: " + commandToRun);
+  println("Location:        " + workingDir);
+  println("---------------------------------------------\n");
+
+  // run the command!
+  try {
+    Process p = Runtime.getRuntime().exec(commandToRun, null, workingDir);
+
+    // variable to check if we've received confirmation of the command
+    int i = p.waitFor();
+
+    // if we have an output, print to screen
+    if (i == 0) {
+
+      // BufferedReader used to get values back from the command
+      BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+
+      // read the output from the command
+      while ( (returnedValues = stdInput.readLine ()) != null) {
+        println(returnedValues);
+      }
+    }
+
+    // if there are any error messages but we can still get an output, they print here
+    else {
+      BufferedReader stdErr = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+
+      // if something is returned (ie: not null) print the result
+      while ( (returnedValues = stdErr.readLine ()) != null) {
+        println(returnedValues);
+      }
+    }
+  }
+
+  // if there is an error, let us know
+  catch (Exception e) {
+    println("Error running command!");  
+    println(e);
+    // e.printStackTrace();    // a more verbose debug, if needed
+  }
+
+  // when done running command, quit
+  println("\n---------------------------------------------");
+  println("DONE!");
 }
