@@ -146,7 +146,8 @@ void draw()
       circleHues.set(currIndex, hue);
     }
     
-    noStroke();
+    strokeWeight(4);
+    stroke(255, 255, 255);
     colorMode(HSB, 255);
     
     for(int i = 0; i < n; i++)
@@ -167,6 +168,7 @@ void draw()
     
   } 
   
+  noStroke();
   //generate 5 evenly spaced points across canvas
   int rectdim = 20;
   for (int j = 1; j < (n+1); j++)
