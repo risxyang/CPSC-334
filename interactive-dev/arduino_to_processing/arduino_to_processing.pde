@@ -14,6 +14,8 @@ int interval, startX, n;
 float centerX, centerY;
 int currIndex = 0;
 int jButtonPrev = 0;
+int mButtonPrev = 0;
+int mButtonHeld = 0;
   
   
 void setup()
@@ -67,14 +69,40 @@ void draw()
     {
       jButtonPrev = 0;
     }
+    
+    //implement mButton control
+    if (input[3] == 1 && mButtonPrev != 1)
+    {
+      mButtonPrev = 1;
+      mButtonHeld = 1;
+    }
+    else if (input [3] == 0 && mButtonPrev !=0)
+    {
+      mButtonPrev = 0;
+      mButtonHeld = 0;
+    }
   
     radius = circleRadii.get(currIndex);
     hue = circleHues.get(currIndex);
-    radius += modifyByThresholds(radius, input[1]);
-    hue = (hue + modifyByThresholds(hue, input[0])) % 255;
     
-    circleRadii.set(currIndex, radius);
-    circleHues.set(currIndex, hue);
+    int rdiff = modifyByThresholds(radius, input[1]);
+    int hdiff = modifyByThresholds(hue, input[0]);
+    
+    if (mButtonHeld == 1)
+    {
+      for (int i = 0; i < n; i++)
+      {
+        circleRadii.set(i, circleRadii.get(i) + rdiff);
+        circleHues.set(i, (circleHues.get(i) + hdiff) % 255);
+      }
+    }
+    else
+    {
+      radius += rdiff;
+      hue = (hue + hdiff) % 255;
+      circleRadii.set(currIndex, radius);
+      circleHues.set(currIndex, hue);
+    }
     
     noStroke();
     colorMode(HSB, 255);
