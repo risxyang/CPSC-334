@@ -9,6 +9,9 @@ ArrayList<Integer> circleCentersY;
 ArrayList<Integer> circleRadii;
 ArrayList<Integer> circleHues;
 
+int nNotes = 13;
+ArrayList<String> noteNames;
+
 int radius = 0;
 int hue = 0;
 int interval, startX, n;
@@ -24,6 +27,7 @@ String commandToRun;
 File workingDir;   // where to run this command, as full path
 String returnedValues;                        
   
+PrintWriter output;
   
 void setup()
 {
@@ -32,7 +36,6 @@ void setup()
   
   commandToRun = "afplay /Users/christineyang/Documents/*F21/CES/PySynth/danube.wav";
   workingDir = new File(sketchPath(""));
-  
   n = 5;
   interval = displayWidth / (n + 1);
   startX = 0;
@@ -52,6 +55,22 @@ void setup()
     circleRadii.add(0);
     circleHues.add(0);
   }
+  
+  noteNames = new ArrayList<String>();
+  noteNames.add("c");
+  noteNames.add("c#");
+  noteNames.add("d");
+  noteNames.add("d#");
+  noteNames.add("e");
+  noteNames.add("f");
+  noteNames.add("f#");
+  noteNames.add("g");
+  noteNames.add("g#");
+  noteNames.add("a");
+  noteNames.add("a#");
+  noteNames.add("b");
+  noteNames.add("c#5");
+  
 }
 
 void settings()
@@ -210,16 +229,60 @@ int modifyByThresholds(float r, int x)
  
 }
 
+void writeFile()
+{
+  output = createWriter("result.py"); 
+  output.println("import pysynth as ps");
+  output.print("song = (");
+  //convert hue and radius for each circle
+  for(int i = 0; i < n; i++)
+  {
+    int r = circleRadii.get(i);
+    int h = circleHues.get(i);
+    
+    int noteIndex = h / 20;
+    int duration;
+    if (r < 85)
+    {
+      duration = 2;
+    }
+    else if(r < 170)
+    {
+       duration = 4; 
+    }
+    else
+    {
+      duration = 8;
+    }
+    
+    output.print("('"+noteNames.get(noteIndex)+"', " + duration + "), ");
+  }
+  output.println(")");
+  output.println("ps.make_wav(song, fn = 'out.wav')");
+  output.flush();
+  output.close();
+  
+}
+
 void playSound()
-{  
-   // give us some info:
-  println("Running command: " + commandToRun);
+{ 
+  writeFile();
+  runCommand("chmod +x result.py");
+  runCommand("mv result.py PySynth");
+  runCommand("python3 PySynth/result.py PySynth/out.wav");
+  runCommand("./play.sh");
+}
+
+void runCommand(String command)
+{
+  // give us some info:
+  println("Running command: " + command);
   println("Location:        " + workingDir);
   println("---------------------------------------------\n");
 
   // run the command!
   try {
-    Process p = Runtime.getRuntime().exec(commandToRun, null, workingDir);
+    Process p = Runtime.getRuntime().exec(command, null, workingDir);
 
     // variable to check if we've received confirmation of the command
     int i = p.waitFor();
