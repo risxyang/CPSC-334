@@ -31,10 +31,10 @@ PrintWriter output;
   
 void setup()
 {
-  String portName = "/dev/tty.SLAB_USBtoUART";
+  //String portName = "/dev/tty.SLAB_USBtoUART"; //for testing on laptop
+  String portName = "/dev/ttyUSB0";
   myPort = new Serial(this, portName, 115200);
   
-  commandToRun = "afplay /Users/christineyang/Documents/*F21/CES/PySynth/danube.wav";
   workingDir = new File(sketchPath(""));
   n = 5;
   interval = displayWidth / (n + 1);
@@ -115,13 +115,13 @@ void draw()
     if(input[4] == 1 && switchPrev != 1)
     {
       switchPrev = 1;
-      playSound();
+      playSound(0);
       
     }
     else if(input[4] == 0 && switchPrev != 0)
     {
       switchPrev = 0;
-      playSound();
+      playSound(1);
     }
     
     radius = circleRadii.get(currIndex);
@@ -135,13 +135,13 @@ void draw()
       for (int i = 0; i < n; i++)
       {
         circleRadii.set(i, circleRadii.get(i) + rdiff);
-        circleHues.set(i, (circleHues.get(i) + hdiff) % 255);
+        circleHues.set(i, ((circleHues.get(i) + hdiff) + 255) % 255);
       }
     }
     else
     {
       radius += rdiff;
-      hue = (hue + hdiff) % 255;
+      hue = ((hue + hdiff) +255) % 255;
       circleRadii.set(currIndex, radius);
       circleHues.set(currIndex, hue);
     }
@@ -231,34 +231,65 @@ int modifyByThresholds(float r, int x)
  
 }
 
-void writeFile()
+void writeFile(int direction) //0 is forewards, 1 is backwards
 {
   output = createWriter("result.py"); 
   output.println("import pysynth as ps");
   output.print("song = (");
   //convert hue and radius for each circle
-  for(int i = 0; i < n; i++)
+  
+  
+  if(direction == 0)
   {
-    int r = circleRadii.get(i);
-    int h = circleHues.get(i);
-    
-    int noteIndex = h / 20;
-    int duration;
-    if (r < 85)
+    for(int i = 0; i < n; i++)
     {
-      duration = 2;
+      int rratio = circleRadii.get(i) / (displayHeight / 2 ); //ratio of radius to half of screen height
+      int h = circleHues.get(i);
+      
+      int noteIndex = h / 20;
+      int duration;
+      if (rratio < 0.2)
+      {
+        duration = 8;
+      }
+      else if(rratio < 0.4)
+      {
+         duration = 4; 
+      }
+      else
+      {
+        duration = 2;
+      }
+      
+      output.print("('"+noteNames.get(noteIndex)+"', " + duration + "), ");
     }
-    else if(r < 170)
-    {
-       duration = 4; 
-    }
-    else
-    {
-      duration = 8;
-    }
-    
-    output.print("('"+noteNames.get(noteIndex)+"', " + duration + "), ");
   }
+  else
+  {
+    for(int i = n-1; i >= 0; i--)
+    {
+      int rratio = circleRadii.get(i) / (displayHeight / 2);
+      int h = circleHues.get(i);
+      
+      int noteIndex = h / 20;
+      int duration;
+      if (rratio < 0.2)
+      {
+        duration = 8;
+      }
+      else if(rratio < 0.4)
+      {
+         duration = 4; 
+      }
+      else
+      {
+        duration = 2;
+      }
+      
+      output.print("('"+noteNames.get(noteIndex)+"', " + duration + "), ");
+    }
+  }
+  
   output.println(")");
   output.println("ps.make_wav(song, fn = 'out.wav')");
   output.flush();
@@ -266,9 +297,9 @@ void writeFile()
   
 }
 
-void playSound()
+void playSound(int direction) //0 is forward, 1 is backwards
 { 
-  writeFile();
+  writeFile(direction);
   runCommand("chmod +x result.py");
   runCommand("mv result.py PySynth");
   runCommand("python3 PySynth/result.py PySynth/out.wav");
@@ -278,9 +309,9 @@ void playSound()
 void runCommand(String command)
 {
   // give us some info:
-  println("Running command: " + command);
-  println("Location:        " + workingDir);
-  println("---------------------------------------------\n");
+  //println("Running command: " + command);
+  //println("Location:        " + workingDir);
+  //println("---------------------------------------------\n");
 
   // run the command!
   try {
@@ -297,7 +328,7 @@ void runCommand(String command)
 
       // read the output from the command
       while ( (returnedValues = stdInput.readLine ()) != null) {
-        println(returnedValues);
+        //println(returnedValues);
       }
     }
 
@@ -307,19 +338,19 @@ void runCommand(String command)
 
       // if something is returned (ie: not null) print the result
       while ( (returnedValues = stdErr.readLine ()) != null) {
-        println(returnedValues);
+        //println(returnedValues);
       }
     }
   }
 
   // if there is an error, let us know
   catch (Exception e) {
-    println("Error running command!");  
-    println(e);
+    //println("Error running command!");  
+    //println(e);
     // e.printStackTrace();    // a more verbose debug, if needed
   }
 
   // when done running command, quit
-  println("\n---------------------------------------------");
-  println("DONE!");
+  //println("\n---------------------------------------------");
+  //println("DONE!");
 }
