@@ -64,3 +64,5 @@ Finally, you'll also want to download the Arduino IDE so you can compile and upl
 ## General Info on Functionality ##
 
 This processing program will write to a .py file, set it to be executable, and then use PySynth to generate a .wav file, which is then played with 'aplay.' This will happen every time a certain input is given. 
+
+There are two versions of this program demo'd in the video. One runs on a larger screen (here, on a macbook), and one runs on a smaller one (5 inch HDMI + Raspi). The primary difference is visual, as the gradient effect that is visible when noStroke() is specified looks grainy on the small display. 
