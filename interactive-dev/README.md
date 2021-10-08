@@ -1,6 +1,7 @@
 # Module 2 Task 2 for CPSC 334: Creative Embedded Systems #
 
 An interactive and exploratory audio-visual experience.
+
 Video Link: https://vimeo.com/626151679
 
 <p align="center">
