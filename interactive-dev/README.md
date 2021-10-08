@@ -1,12 +1,12 @@
-### Module 2 Task 2 for CPSC 334: Creative Embedded Systems ###
+# Module 2 Task 2 for CPSC 334: Creative Embedded Systems #
 
 An interactive and exploratory audio-visual experience.
 
-![image of esp32 in clear enclosure with visible, colorful wires, a raspberry pi plugged in to a 5inch hdmi screen displaying multicolored dots](./img)
+![image of esp32 in clear enclosure with visible, colorful wires, a raspberry pi plugged in to a 5inch hdmi screen displaying multicolored dots](./img.jpg)
 
 Video Link: https://vimeo.com/626151679
 
-# Installation #
+## Installation ##
 
 Materials:
 - Raspberry Pi
@@ -57,6 +57,6 @@ More on this library here: https://github.com/mdoege/PySynth
 
 Finally, you'll also want to download the Arduino IDE so you can compile and upload code to an ESP32. Under /reference/test_allinputs is an .ino file, in which you can define your GPIO pin setup. This will enable your ESP32 to send information through a port (likely '/dev/ttyUSB0' on your pi) with baudrate 115200. The processing file is set up to receive information from this port at this baudrate (in the form of digital reads of [joystick x], [joystick y], [joystick button], [button], [switch]). If your ESP32 happens to communicate over a different port on your pi, you can specify this in the processing file by setting String portName in setup().
 
-# General Info on Functionality #
+## General Info on Functionality ##
 
 This processing program will write to a .py file, set it to be executable, and then run PySynth to generate a .wav file, which is then played with 'aplay.' This will happen every time a certain input is given. 
