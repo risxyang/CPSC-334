@@ -1,13 +1,13 @@
 # Module 2 Task 2 for CPSC 334: Creative Embedded Systems #
 
 An interactive and exploratory audio-visual experience.
+Video Link: https://vimeo.com/626151679
 
 <p align="center">
 <img src="https://github.com/risxyang/CPSC-334/blob/main/interactive-dev/img.jpg"  width="450px" height ="auto" alt="image of esp32 in clear enclosure with visible, colorful wires, a raspberry pi plugged in to a 5inch hdmi screen displaying multicolored dots">
 </p>
 
 
-Video Link: https://vimeo.com/626151679
 
 ## Installation ##
 
