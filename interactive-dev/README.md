@@ -2,7 +2,7 @@
 
 An interactive and exploratory audio-visual experience.
 
-<img src="https://github.com/risxyang/CPSC-334/blob/main/interactive-dev/img.jpg"  width="60%" height ="auto" alt="image of esp32 in clear enclosure with visible, colorful wires, a raspberry pi plugged in to a 5inch hdmi screen displaying multicolored dots">
+<img src="https://github.com/risxyang/CPSC-334/blob/main/interactive-dev/img.jpg"  width="400px" height ="auto" alt="image of esp32 in clear enclosure with visible, colorful wires, a raspberry pi plugged in to a 5inch hdmi screen displaying multicolored dots">
 
 
 Video Link: https://vimeo.com/626151679
