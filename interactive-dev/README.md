@@ -2,7 +2,8 @@
 
 An interactive and exploratory audio-visual experience.
 
-![image of esp32 in clear enclosure with visible, colorful wires, a raspberry pi plugged in to a 5inch hdmi screen displaying multicolored dots](./img.jpg)
+<img src="https://github.com/risxyang/CPSC-334/blob/main/interactive-dev/img.jpg"  width="60%" height ="auto" alt="image of esp32 in clear enclosure with visible, colorful wires, a raspberry pi plugged in to a 5inch hdmi screen displaying multicolored dots">
+
 
 Video Link: https://vimeo.com/626151679
 
@@ -59,4 +60,4 @@ Finally, you'll also want to download the Arduino IDE so you can compile and upl
 
 ## General Info on Functionality ##
 
-This processing program will write to a .py file, set it to be executable, and then run PySynth to generate a .wav file, which is then played with 'aplay.' This will happen every time a certain input is given. 
+This processing program will write to a .py file, set it to be executable, and then use PySynth to generate a .wav file, which is then played with 'aplay.' This will happen every time a certain input is given. 
