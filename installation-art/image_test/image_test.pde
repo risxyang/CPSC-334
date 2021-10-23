@@ -17,7 +17,9 @@ void setup() {
   //photo = loadImage("1.jpeg");
   maskImage = loadImage("mask.jpeg");
   //photo.mask(maskImage);
+  //  image(photo, 0, 0);
 }
+
 
 void draw() {
   //background(0);
@@ -33,11 +35,11 @@ void draw() {
   PImage photo = photos.get(0);
   photo.mask(maskImage);
   image(photo, 0, 0);
-  image(photo, mouseX, mouseY);
-  image(photo, mouseY, mouseX);
+  //image(photo, mouseX, mouseY);
+  //image(photo, mouseY, mouseX);
 }
 
-void memBox(int i, int sz)
+void memBox(int i, int sz) //draw one side of a box
 {
   //PImage photo = loadImage(str(i)+".jpeg");
   PImage photo = photos.get(0); //change
