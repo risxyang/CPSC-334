@@ -1,65 +1,106 @@
-PImage photo, maskImage;
+//to store jpeg images from the project data folder
 ArrayList<PImage> photos;
+
+//values [0,5], corresponding to the current face of the cube being drawn
 int iter = 0;
-int value; //test mouseDragged 
+
+//u,v values for applying texture to cube faces. can be randomized every # of calls to draw
 int u, v;
+
+//vars which shape the moving light geomtry, number of panes, etc
+//h = height of single pane
+//w = width of single pane
+//o = offset that makes this pane a parallelogram (the larger, the more slanted the pane)
+//nRows, nCols = number of rows and columns of panes
 int h, w, o, g, nRows, nCols; //for controlling geometry
-int hshift, vshift; //light shift over successive calls to draw
+
+//hshift and vshift keep track of light shift over successive calls to draw. change with time and are updated in each call to draw()
+int hshift, vshift; 
+
+//keep track of current translation for cube side and light panes
+int xtrans, ytrans; 
+
+//global vars for storing most recently measured time in seconds (s) and milliseconds (ms)
 int s; //for measuring time
+int ms;
+
+//start and end values for interpolating the color at any given time
 color light, dark;
+
+//an off-screen graphics buffer. allows blurring of certain effects separate from others
 PGraphics pg;
+
+//global var for keeping track of current rotation (for light, and cube side)
 float rot;
-int time;
+
+//current blur amount, randomized for each moving light generated
 int b;
 
+//for testing purposes, a base photo image 
+//maskImage = image used for masking onto photo, or images from photos array
+PImage photo, maskImage;
+
 void setup() {
-  //size(400, 400);
+
+    size(600, 600, P3D);
+    
+    photos = new ArrayList<PImage>();
+    
+    //initialize first set of moving panes
     h = 140;
     w = 100;
     o = 30; // offset; can change
     g = 15; // gap
     nRows = 4;
     nCols = 4;
+    
     hshift = 0;
     vshift = 0;
+    
+    xtrans = 200;
+    ytrans = 200;
+    
     b = 4; //blur
     
     light = color(255, 255, 150);
     dark = color(250, 120, 10);
     
-  photos = new ArrayList<PImage>();
-  
-  size(600, 600, P3D);
-  
+  //store all jpegs in data folder
    for(int i = 1; i <= 6; i++)
    {
-    PImage pi = loadImage(str(i)+".jpeg");
-    photos.add(pi);
-  }
+      PImage pi = loadImage(str(i)+".jpeg");
+      photos.add(pi);
+    }
    
-  photo = loadImage("1.jpeg");
+  //load in mask
   maskImage = loadImage("mask.jpeg");
+  
+  //for testing
+  photo = loadImage("1.jpeg");
+  
   //photo.mask(maskImage);
-    image(photo, 0, 0);
-    
-    pg = createGraphics(600, 600);
-    time = millis();
+  
+  //display base photo
+  image(photo, 0, 0);
+  
+  
+  pg = createGraphics(600, 600);
+  ms = millis(); //store start time in MS
 }
 
 
 void draw() {
   //background(0);
-  
 
   //get the current time (seconds, values 0 to 59)
   s = second();
   
-  int sz = 300;
-  int tsz = 50;
-  //rotateY(mouseY);
-  //rotateY(radians(PI * 2.0 * random(0,1)));
-  //rotateX(mouseX);
-  translate(200, 200, 0);
+  int sz = 300; //box side size
+  int tsz = 50; //texture size (length and width)
+
+  //translate(200, 200, 0);
+  //translate((int)random(150, 300), (int)random(150,300));
+  translate(xtrans, ytrans, 0);
 
   //if (keyPressed) {
   //  if (key == 'b' || key == 'B') {
@@ -71,13 +112,15 @@ void draw() {
   //  }
   //}
 
-  if (millis() > time + 5000)
+  if (millis() > ms + 5000)
   {
     //println("yeet");
-       time = millis();
+        ms = millis();
     
        hshift = 0;
        vshift = 0;
+       xtrans =(int)random(50, 300);
+       ytrans =(int)random(50, 300);
        
       h = (int)random(50, 250);
       w = (int)random(50, 250);
@@ -106,13 +149,13 @@ void draw() {
 
 
   
-  //filter(NORMAL);
   blendMode(NORMAL);
   photo.mask(maskImage);
   image(photo, 0, 0);
   }
   
   blendMode(NORMAL);
+  rotateY(rot);
   photo.mask(maskImage);
   image(photo, 0, 0);
   
@@ -153,7 +196,7 @@ void draw() {
   //rotateZ(hshift);
   //println(PI * 2.0 * (s/60.0));
   //rotateY(radians(PI/3.0));
-  rotateY(rot);
+  //rotateY(rot); //?
   image(pg, 0, 0); 
   vshift +=2;
   hshift +=3;
@@ -229,26 +272,18 @@ void memBox(int i, int sz, int tsz, int u, int v) //draw one side of a box
 
 }
 
-void mouseDragged() 
-{
-  value = value + 1;
-  if (value > 360) {
-    value = 0;
-  }
-}
-
 float getOpacity(int s)
 {
   if(s < 30) //slowly fade in from s=0 to s=30
   {
-    return (s / 30.0) * 100 * 0.8;
+    return (s / 30.0) * 100 * 0.6;
   }
   else if (s >= 55) //start fading out at s=55
   {
-    return (-20.0 * s + 1200) * 0.8;
+    return (-20.0 * s + 1200) * 0.6;
   }
   else //return 100 for s between 30 and 55
   {
-    return 80;
+    return 60;
   }
 }
