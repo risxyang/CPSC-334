@@ -37,11 +37,6 @@ void draw()
   
   //get the current time (seconds, values 0 to 59)
   s = second();
-  if (s == 0)
-  {
-    hshift = 0;
-    vshift = 0;
-  }
   
   pg.beginDraw();
   pg.clear();
@@ -74,9 +69,19 @@ void draw()
   pg.filter(BLUR, 4);
   pg.endDraw();
   blendMode(ADD);
+  //rotateY(81);
+  rotateZ(radians(PI * 2.0 * (s/60.0)));
+  //rotateZ(hshift);
+  //println(PI * 2.0 * (s/60.0));
+  //rotateY(radians(PI/3.0));
   image(pg, 0, 0); 
   vshift +=2;
   hshift +=3;
+  if (second() < s)
+  {
+    hshift = 0;
+    vshift = 0;
+  }
   
 
  
