@@ -1,4 +1,5 @@
 int h, w, o, g, nRows, nCols; //for controlling geometry
+int hshift, vshift; //light shift over successive calls to draw
 int s; //for measuring time
 color light, dark;
 PImage photo, maskImage;
@@ -12,6 +13,8 @@ void setup() {
     g = 15; // gap
     nRows = 4;
     nCols = 4;
+    hshift = 0;
+    vshift = 0;
     
     light = color(255, 255, 150);
     dark = color(250, 150, 10);
@@ -34,7 +37,12 @@ void draw()
   
   //get the current time (seconds, values 0 to 59)
   s = second();
-   
+  if (s == 0)
+  {
+    hshift = 0;
+    vshift = 0;
+  }
+  
   pg.beginDraw();
   pg.clear();
   for(int i = 0; i < nRows; i++)
@@ -47,9 +55,11 @@ void draw()
       //color c = color(220, 150, 10);
       color c = lerpColor(light, dark, (s / 59.0));  
       pg.fill(c, getOpacity(s));
-      int xOffset = j * (o+w+g) + mouseX;
-      int yOffset = i * (h + g) + mouseY;
-      int rowIndent = i * o;
+      //int xOffset = j * (o+w+g) + mouseX;
+      //int yOffset = i * (h + g) + mouseY;
+      float xOffset = j * (o+w+g) + hshift;
+      float yOffset = i * (h + g) + vshift;
+      float rowIndent = i * o;
       pg.vertex(0 + xOffset + rowIndent, 0 + yOffset);
       pg.vertex(w + xOffset + rowIndent, 0 + yOffset);
       pg.vertex(w+o + xOffset + rowIndent, h + yOffset);
@@ -65,16 +75,13 @@ void draw()
   pg.endDraw();
   blendMode(ADD);
   image(pg, 0, 0); 
+  vshift +=2;
+  hshift +=3;
+  
+
  
 }
 
-////parabola eq which smoothes out the minute transition
-////fades out opacity of the light shape near the end of the minute (50s), and fades it in at 10 s
-//int getOpacity(int s) // take in current second value
-//{
-//  println(-1 * int((s-10) * (s-50) / 3));
-//  return -1 * int((s-10) * (s-50) / 3); //division makes this cap out at 100
-//}
 
 float getOpacity(int s)
 {
