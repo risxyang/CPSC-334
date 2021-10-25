@@ -40,12 +40,17 @@ int b;
 //maskImage = image used for masking onto photo, or images from photos array
 PImage photo, maskImage;
 
+//box side size
+int sz;
+
 void setup() {
 
     size(600, 600, P3D);
     
     photos = new ArrayList<PImage>();
     
+    //starting box side size
+    sz = 300;
     //initialize first set of moving panes
     h = 140;
     w = 100;
@@ -86,6 +91,7 @@ void setup() {
   
   pg = createGraphics(600, 600);
   ms = millis(); //store start time in MS
+  
 }
 
 
@@ -95,132 +101,115 @@ void draw() {
   //get the current time (seconds, values 0 to 59)
   s = second();
   
-  int sz = 300; //box side size
   int tsz = 50; //texture size (length and width)
-
-  //translate(200, 200, 0);
-  //translate((int)random(150, 300), (int)random(150,300));
+  
   translate(xtrans, ytrans, 0);
 
-  //if (keyPressed) {
-  //  if (key == 'b' || key == 'B') {
-  //    image(photo, 0, 0);
-  //    u = (int)random(1, photos.get(0).width - sz);
-  //    v = (int)random(1, photos.get(0).height - sz);
-  //    u = 0;
-  //    v = 0;
-  //  }
-  //}
 
-  if (millis() > ms + 5000)
+  if (millis() > ms + 5000) //every 5 seconds, reset cube drawing, light size
   {
-    //println("yeet");
-        ms = millis();
+    //restart timer
+    ms = millis();
     
-       hshift = 0;
-       vshift = 0;
-       xtrans =(int)random(50, 300);
-       ytrans =(int)random(50, 300);
-       
-      h = (int)random(50, 250);
-      w = (int)random(50, 250);
-      o = (int)random(10, 50); // offset; can change
-      g = (int)random(10, 50); // gap
-      nRows = (int)random(1, 6);
-      nCols = (int)random(1, 6);
-      b = (int)random(2,8);
-    
-    
-      rot = random(0, 360);
-      rotateY(rot);
-      println(rot);
-      //sep sides
-    memBox(iter, sz, tsz, u, v);
-    iter += 1;
-    if (iter >= 6)
-    {
-      iter = 0;
-    }
-    
-  //for (int j = 0; j < 6; j++)
-  //{
-  //  memBox(j, sz, tsz, u, v);
-  //}
-
-
-  
-  blendMode(NORMAL);
-  photo.mask(maskImage);
-  image(photo, 0, 0);
-  }
-  
-  blendMode(NORMAL);
-  rotateY(rot);
-  photo.mask(maskImage);
-  image(photo, 0, 0);
-  
-  
-  pg.beginDraw();
-  pg.clear();
-  for(int i = 0; i < nRows; i++)
-  {
-    for (int j = 0; j < nCols; j++)
-    {
-      pg.beginShape();
-      pg.noStroke();
-      //pg.blendMode(ADD);
-      //color c = color(220, 150, 10);
-      color c = lerpColor(light, dark, (s / 59.0));  
-      pg.fill(c, getOpacity(s));
-      //int xOffset = j * (o+w+g) + mouseX;
-      //int yOffset = i * (h + g) + mouseY;
-      float xOffset = j * (o+w+g) + hshift;
-      float yOffset = i * (h + g) + vshift;
-      float rowIndent = i * o;
-      pg.vertex(0 + xOffset + rowIndent, 0 + yOffset);
-      pg.vertex(w + xOffset + rowIndent, 0 + yOffset);
-      pg.vertex(w+o + xOffset + rowIndent, h + yOffset);
-      pg.vertex(o + xOffset + rowIndent, h + yOffset);
-      pg.endShape();
-
-      //filter(BLUR, 4);
-      
-    }
-  }
-  
-  pg.filter(BLUR, b);
-  pg.endDraw();
-  blendMode(ADD);
-  //rotateY(81);
-  rotateZ(radians(PI * 2.0 * (s/60.0)));
-  //rotateZ(hshift);
-  //println(PI * 2.0 * (s/60.0));
-  //rotateY(radians(PI/3.0));
-  //rotateY(rot); //?
-  image(pg, 0, 0); 
-  vshift +=2;
-  hshift +=3;
-  if (second() < s)
-  {
     hshift = 0;
     vshift = 0;
-  }
-  blendMode(NORMAL);  
-
+    xtrans =(int)random(200, 300);
+    ytrans =(int)random(0, 100);
+       
+    h = (int)random(50, 250);
+    w = (int)random(50, 250);
+    o = (int)random(10, 50); // offset; can change
+    g = (int)random(10, 50); // gap
+    nRows = (int)random(1, 6);
+    nCols = (int)random(1, 6);
+    
+    b = (int)random(2,8);
+    rot = random(0, 360);
+    rotateY(rot);
+    
+    //u = (int)random(1, photos.get(0).width - sz);
+    //v = (int)random(1, photos.get(0).height - sz);
+    
+    sz = (int)random(400, 700); //box side size
+      
+    blendMode(NORMAL);
+    photo.mask(maskImage);
+    image(photo, 0, 0);
+    
+    
+    iter = (iter + 1) % 6;
+  } //end condition
+  
+    blendMode(NORMAL);
+    rotateY(rot);
+    
+    float shiftFactor = 20.0;
+    int yShift = (int)(sin(PI * 2.0 * ((s % 60.0) / 60.0)) * shiftFactor);
+    //println((s % 10.0) / 10);
+    println(s);
+    println(sin(PI * 2.0 * ((s % 60.0) / 60.0)) * shiftFactor);
+    image(photo, 0, yShift);
+    memBox(iter, sz, tsz, u, v, false);
+    memBox(iter, sz, tsz, u, v, true);
   
   
-  //PImage photo = photos.get(0);
-  //photo.mask(maskImage);
-  //image(photo, 0, 0);
-  //image(photo, mouseX, mouseY);
-  //image(photo, mouseY, mouseX);
+    pg.beginDraw();
+    pg.clear(); //remove whatever was previously in the buffer
+    
+    for(int i = 0; i < nRows; i++)
+    {
+      for (int j = 0; j < nCols; j++)
+      {
+        
+        //a single pane
+        pg.beginShape();
+        pg.noStroke();
+        color c = lerpColor(light, dark, (s / 59.0));  
+        pg.fill(c, getOpacity(s));
+        float xOffset = j * (o+w+g) + hshift;
+        float yOffset = i * (h + g) + vshift;
+        float rowIndent = i * o;
+        pg.vertex(0 + xOffset + rowIndent, 0 + yOffset);
+        pg.vertex(w + xOffset + rowIndent, 0 + yOffset);
+        pg.vertex(w+o + xOffset + rowIndent, h + yOffset);
+        pg.vertex(o + xOffset + rowIndent, h + yOffset);
+        pg.endShape();
+        
+      }
+    }
+    
+    pg.filter(BLUR, b);
+    pg.endDraw();
+    
+    blendMode(ADD); //for drawing the moving light, use add blend mode
+    rotateZ(radians(PI * 2.0 * (s/60.0)));
+    image(pg, 0, 0); 
+    
+    //shift position of light for next draw()
+    vshift +=2;
+    hshift +=3;
+    
+    //reset h/v shifts at new minute mark
+    if (second() < s)
+    {
+      hshift = 0;
+      vshift = 0;
+    }
+    
+    //set blendmode back to normal
+    blendMode(NORMAL);  
 }
 
-void memBox(int i, int sz, int tsz, int u, int v) //draw one side of a box
+void memBox(int i, int sz, int tsz, int u, int v, boolean mask) //draw one side of a box
 {
   //PImage photo = loadImage(str(i)+".jpeg");
   PImage photo = photos.get(0); //change
-  //photo.mask(maskImage);
+  
+  if(mask == true)
+  {
+    photo.mask(maskImage);
+  }
+  
   textureMode(IMAGE);
   noStroke();
   beginShape();
@@ -269,6 +258,11 @@ void memBox(int i, int sz, int tsz, int u, int v) //draw one side of a box
     vertex(0, 0, sz * 1, u, v + tsz);
   }
   endShape();
+  
+  //if(mask == false)
+  //{
+  //    memBox(i, sz, tsz, u, v, true);
+  //}
 
 }
 
