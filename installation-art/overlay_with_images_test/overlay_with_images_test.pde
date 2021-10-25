@@ -63,7 +63,7 @@ void setup() {
     vshift = 0;
     
     xtrans = 200;
-    ytrans = 200;
+    ytrans = 0;
     
     b = 4; //blur
     
@@ -113,8 +113,9 @@ void draw() {
     
     hshift = 0;
     vshift = 0;
-    xtrans =(int)random(200, 300);
-    ytrans =(int)random(0, 100);
+    xtrans =(int)random(100, 350);
+    //ytrans =(int)random(0, 100);
+    //ytrans = 0;
        
     h = (int)random(50, 250);
     w = (int)random(50, 250);
@@ -127,77 +128,78 @@ void draw() {
     rot = random(0, 360);
     rotateY(rot);
     
-    //u = (int)random(1, photos.get(0).width - sz);
-    //v = (int)random(1, photos.get(0).height - sz);
+    u = (int)random(1, photos.get(0).width - sz);
+    v = (int)random(1, photos.get(0).height - sz);
     
     sz = (int)random(400, 700); //box side size
       
-    blendMode(NORMAL);
+    blendMode(MULTIPLY);
+    //photo = photos.get(iter);
     photo.mask(maskImage);
-    image(photo, 0, 0);
+    image(photo, 0, 0); //!
     
     
     iter = (iter + 1) % 6;
   } //end condition
   
-    blendMode(NORMAL);
-    rotateY(rot);
-    
-    float shiftFactor = 20.0;
-    int yShift = (int)(sin(PI * 2.0 * ((s % 60.0) / 60.0)) * shiftFactor);
-    //println((s % 10.0) / 10);
-    println(s);
-    println(sin(PI * 2.0 * ((s % 60.0) / 60.0)) * shiftFactor);
-    image(photo, 0, yShift);
-    memBox(iter, sz, tsz, u, v, false);
-    memBox(iter, sz, tsz, u, v, true);
+      blendMode(NORMAL);
+      rotateY(rot);
+      
+      float shiftFactor = 20.0;
+      int yShift = (int)(sin(PI * 2.0 * ((s % 60.0) / 60.0)) * shiftFactor);
+       
+      image(photo, 0, yShift); //!
+      memBox(iter, sz, tsz, u, v, false);
+      memBox(iter, sz, tsz, u, v, true);
   
-  
-    pg.beginDraw();
-    pg.clear(); //remove whatever was previously in the buffer
+   if (keyPressed == true) {
     
-    for(int i = 0; i < nRows; i++)
-    {
-      for (int j = 0; j < nCols; j++)
+      pg.beginDraw();
+      pg.clear(); //remove whatever was previously in the buffer
+      
+      for(int i = 0; i < nRows; i++)
       {
-        
-        //a single pane
-        pg.beginShape();
-        pg.noStroke();
-        color c = lerpColor(light, dark, (s / 59.0));  
-        pg.fill(c, getOpacity(s));
-        float xOffset = j * (o+w+g) + hshift;
-        float yOffset = i * (h + g) + vshift;
-        float rowIndent = i * o;
-        pg.vertex(0 + xOffset + rowIndent, 0 + yOffset);
-        pg.vertex(w + xOffset + rowIndent, 0 + yOffset);
-        pg.vertex(w+o + xOffset + rowIndent, h + yOffset);
-        pg.vertex(o + xOffset + rowIndent, h + yOffset);
-        pg.endShape();
-        
+        for (int j = 0; j < nCols; j++)
+        {
+          
+          //a single pane
+          pg.beginShape();
+          pg.noStroke();
+          color c = lerpColor(light, dark, (s / 59.0));  
+          pg.fill(c, getOpacity(s));
+          float xOffset = j * (o+w+g) + hshift;
+          float yOffset = i * (h + g) + vshift;
+          float rowIndent = i * o;
+          pg.vertex(0 + xOffset + rowIndent, 0 + yOffset);
+          pg.vertex(w + xOffset + rowIndent, 0 + yOffset);
+          pg.vertex(w+o + xOffset + rowIndent, h + yOffset);
+          pg.vertex(o + xOffset + rowIndent, h + yOffset);
+          pg.endShape();
+          
+        }
       }
-    }
-    
-    pg.filter(BLUR, b);
-    pg.endDraw();
-    
-    blendMode(ADD); //for drawing the moving light, use add blend mode
-    rotateZ(radians(PI * 2.0 * (s/60.0)));
-    image(pg, 0, 0); 
-    
-    //shift position of light for next draw()
-    vshift +=2;
-    hshift +=3;
-    
-    //reset h/v shifts at new minute mark
-    if (second() < s)
-    {
-      hshift = 0;
-      vshift = 0;
-    }
-    
-    //set blendmode back to normal
-    blendMode(NORMAL);  
+      
+      pg.filter(BLUR, b);
+      pg.endDraw();
+      
+      blendMode(ADD); //for drawing the moving light, use add blend mode
+      rotateZ(radians(PI * 2.0 * (s/60.0)));
+      image(pg, 0, 0); 
+      
+      //shift position of light for next draw()
+      vshift +=2;
+      hshift +=3;
+      
+      //reset h/v shifts at new minute mark
+      if (second() < s)
+      {
+        hshift = 0;
+        vshift = 0;
+      }
+      
+      //set blendmode back to normal
+      blendMode(NORMAL);  
+   }
 }
 
 void memBox(int i, int sz, int tsz, int u, int v, boolean mask) //draw one side of a box
@@ -208,6 +210,11 @@ void memBox(int i, int sz, int tsz, int u, int v, boolean mask) //draw one side 
   if(mask == true)
   {
     photo.mask(maskImage);
+    blendMode(NORMAL);
+  }
+  else
+  {
+    blendMode(MULTIPLY);
   }
   
   textureMode(IMAGE);
