@@ -43,14 +43,24 @@ PImage photo, maskImage;
 //box side size
 int sz;
 
+int sensordiff = 100; 
+
+int centerX, centerY; //center of display
+
 void setup() {
 
-    size(600, 600, P3D);
     
+    size(600, 600, P3D);
+    fullScreen();
+    
+    //get center of display
+    centerX = displayWidth / 2;
+    centerY = displayHeight / 2;
+  
     photos = new ArrayList<PImage>();
     
     //starting box side size
-    sz = 300;
+    sz = centerX;
     //initialize first set of moving panes
     h = 140;
     w = 100;
@@ -89,14 +99,59 @@ void setup() {
   image(photo, 0, 0);
   
   
-  pg = createGraphics(600, 600);
+  pg = createGraphics(displayWidth, displayHeight);
   ms = millis(); //store start time in MS
   
 }
 
+//void settings()
+//{
+//  fullScreen();
+  
+//}
+
+
 
 void draw() {
   //background(0);
+   
+  //hide mouse
+  noCursor();
+  //get current sensor values from text file
+  String[] sensorVals = loadStrings("../wifiread");
+  //println("there are " + sensorVals.length + " lines");
+  for (int i = 0 ; i < sensorVals.length; i++) {
+      println(sensorVals[i]);
+  }
+  
+  String[] arr = sensorVals[0].split(",");
+  int[] input = {0, 0, 0, 0, 0, 0};
+  for(int i = 0; i < 6; i++)
+  {
+     input[i] = parseInt(arr[i]);
+  }
+  //i = 0 is initial light sensors summed value
+  //i = 1 is current light sensors summed value
+  //i = 2 is initial piezo/vibration sensor value
+  //i = 3 is current piezo/vibration sensor value
+  //i = 4 is initial capacitative touch sensor value
+  //i = 5 is current capacitative touch sensor value
+
+  //covering light sensors => light moves faster increase v/hshifts by (current - initial light sensor / 200)
+  //vibration or capacitative touch values other than initial (differing by +/-50) cause the light not to show
+  //vibration or capacitative touch values also cause the images to shift by twice as fast if detected
+  
+  int lightDiff = abs(input[1] - input[0]) / 200;
+  int touchDiff = max(abs(input[3] - input[2]), abs(input[5] - input[4]));
+  boolean touched;
+  if (touchDiff > 50)
+  {
+    touched = true;
+  }
+  else
+  {
+    touched = false;
+  }
 
   //get the current time (seconds, values 0 to 59)
   s = second();
@@ -105,20 +160,29 @@ void draw() {
   
   translate(xtrans, ytrans, 0);
 
-
-  if (millis() > ms + 5000) //every 5 seconds, reset cube drawing, light size
+  int waitTime;
+  if(touched)
+  {
+    waitTime = 2500; //shift images faster if cube is being moved around / touched
+  }
+  else
+  {
+    waitTime = 5000;
+  }
+    
+  if (millis() > ms + waitTime) //every 2.5 or 5 seconds, reset cube drawing, light size
   {
     //restart timer
     ms = millis();
     
     hshift = 0;
     vshift = 0;
-    xtrans =(int)random(100, 350);
+    xtrans =(int)random(100, displayWidth / 2);
     //ytrans =(int)random(0, 100);
     //ytrans = 0;
        
-    h = (int)random(50, 250);
-    w = (int)random(50, 250);
+    h = (int)random(50, displayWidth * 0.4);
+    w = (int)random(50, displayWidth * 0.4);
     o = (int)random(10, 50); // offset; can change
     g = (int)random(10, 50); // gap
     nRows = (int)random(1, 6);
@@ -131,7 +195,7 @@ void draw() {
     u = (int)random(1, photos.get(0).width - sz);
     v = (int)random(1, photos.get(0).height - sz);
     
-    sz = (int)random(400, 700); //box side size
+    sz = (int)random(displayWidth * 0.6, displayWidth + 100); //box side size
       
     blendMode(MULTIPLY);
     //photo = photos.get(iter);
@@ -152,7 +216,7 @@ void draw() {
       memBox(iter, sz, tsz, u, v, false);
       memBox(iter, sz, tsz, u, v, true);
   
-   if (keyPressed == true) {
+   if (!touched) {
     
       pg.beginDraw();
       pg.clear(); //remove whatever was previously in the buffer
@@ -187,8 +251,8 @@ void draw() {
       image(pg, 0, 0); 
       
       //shift position of light for next draw()
-      vshift +=2;
-      hshift +=3;
+      vshift += (2 + lightDiff);
+      hshift += (3 + lightDiff);
       
       //reset h/v shifts at new minute mark
       if (second() < s)

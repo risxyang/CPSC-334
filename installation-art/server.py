@@ -13,7 +13,7 @@ s.listen(0)
 
 
 while True:
-    # fp = open("wifiread.txt", "w")
+    # fp = open("wifiread", "w")
     # accept connections from outside
     (cs, addr) = s.accept()
     # now do something with the clientsocket
@@ -23,9 +23,9 @@ while True:
     print(content)
     # fp.truncate(0) #clear
     # fp.write(content)
-    os.system('cp wifiread.txt wifiread')
+    # os.system('cp wifiread.txt wifiread')
     os.system('echo '+ content + '> wifiread')
-    cs.send(content.encode())
+    # cs.send(content.encode())
     content = 0
     # fp.flush()
     # fp.close()
