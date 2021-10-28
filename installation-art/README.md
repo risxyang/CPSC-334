@@ -3,7 +3,7 @@
 A wireless art installation piece, reflecting on memory and the passage of time.  
 
 <p align="center">
-<img src="https://github.com/risxyang/CPSC-334/blob/main/installation-art/images/img/png"  width="450px" height ="auto" alt="visuals from a processing program">
+<img src="https://github.com/risxyang/CPSC-334/blob/main/installation-art/images/img.png"  width="450px" height ="auto" alt="visuals from a processing program">
 </p>
 
 ## Installation ##
