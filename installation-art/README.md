@@ -36,14 +36,15 @@ If there was not already a /sketchbook/sketches directory on your pi, you can cr
 Finally, navigate to where processing is installed on your machine and run the command to set visual output to your HDMI display:
 
 `cd ~/processing-3.5.3
-DISPLAY=:0 ./processing-java --sketch=/home/pi/sketchbook/sketches/final_raspi_vers --present 
+DISPLAY=:0 ./processing-java --sketch=/home/pi/sketchbook/sketches/final_raspi_vers --present`
 
 
 This will run your code without needing the processing editor, and can be done over ssh if you don't have a keyboard plugged in to your raspi. 
 
 (Otherwise, you can simply run the mac version of this program in the editor on your machine -- this will probably work just fine on other systems too, dependent on the version of processing installed-- I have not tested this).
 
-Finally, you'll also want to download the Arduino IDE so you can compile and upload code which handles sensor input to an ESP32. In this director is an .ino file, in which you can define your GPIO pin setup and the IP address of a server to which your ESP32 will send the sensor information. 
+Finally, you'll also want to download the Arduino IDE so you can compile and upload code which handles sensor input to an ESP32. In the wifi_arduino directory is an .ino file, in which you can define your GPIO pin setup and the IP address of a server to which your ESP32 will send the sensor information. You will want to install the <a href="https://playground.arduino.cc/Main/CapacitiveSensor/">capacitative sensor library.</a> 
+- If this creates strange errors on compile, you may have to edit the .h file for the library with the <b> #elif defined(ARDUINO_ARCH_ESP32) </b> section in <a href="https://github.com/PaulStoffregen/OneWire/blob/master/util/OneWire_direct_gpio.h">this header file.</a> This fix was proposed <a href="https://github.com/PaulStoffregen/CapacitiveSensor/issues/24">here.</a>
 
 In this directory is a server.py file you will need to receive sensor data on your machine. Update the IP address to which you are binding the socket to that of your machine. The server writes to a text file which is read by Processing to get the most recent batch of sensor data. Sensor data comes in the form of analog reads of:
 - [average sum of all light sensor values at initialization, over 10 successive reads]
