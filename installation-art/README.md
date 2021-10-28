@@ -56,10 +56,11 @@ In this directory is a server.py file you will need to receive sensor data on yo
 This setup allows tracking of deviation from the initial state of sensor values, which are set immediately after boot.
 
 To set this program to run on boot, add the following lines of code to the end of ~/.profile on your pi:
-`python3 [path to your server.py file]
-cd ~/processing-3.5.3
+<code>
+python3 [path to your server.py file] <br>
+cd ~/processing-3.5.3 <br>
 DISPLAY=:0 ./processing-java --sketch=/home/pi/sketchbook/sketches/final_raspi_vers --present 
-`
+</code>
 
 ## General Info on Functionality ##
 Notes on interactivity:
