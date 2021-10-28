@@ -67,6 +67,6 @@ Notes on interactivity:
 - Jostling the box, picking it up, holding the box on or near the side of the touch sensor, and generally causing any vibration to the structure will cause the moving light to disappear.
 
 <p align="center">
-<img src="https://github.com/risxyang/CPSC-334/blob/main/installation-art/images/img4.png" alt="cube and stand enclosure on a table as visuals are projected onto them and the wall behind them">
+<img src="https://github.com/risxyang/CPSC-334/blob/main/installation-art/images/img4.jpg" alt="cube and stand enclosure on a table as visuals are projected onto them and the wall behind them">
 </p>
 
