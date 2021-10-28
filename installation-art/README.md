@@ -2,6 +2,10 @@
 
 A wireless art installation piece, reflecting on memory and the passage of time.  
 
+Video Links:
+https://vimeo.com/639839204 (Digital visual output)
+https://vimeo.com/639834601 
+
 <p align="center">
 <img src="https://github.com/risxyang/CPSC-334/blob/main/installation-art/images/img1.png"  width="450px" height ="auto" alt="visuals from a processing program">
 </p>

@@ -51,7 +51,7 @@ void setup() {
 
     
     //size(600, 600, P3D);
-    fullScreen();
+    fullScreen(P3D);
     
     //get center of display
     centerX = displayWidth / 2;

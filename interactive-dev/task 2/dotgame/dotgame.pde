@@ -31,8 +31,8 @@ PrintWriter output;
   
 void setup()
 {
-  //String portName = "/dev/tty.SLAB_USBtoUART"; //for testing on laptop
-  String portName = "/dev/ttyUSB0"; //for raspi
+  String portName = "/dev/tty.SLAB_USBtoUART"; //for testing on laptop
+  //String portName = "/dev/ttyUSB0"; //for raspi
   myPort = new Serial(this, portName, 115200);
   
   workingDir = new File(sketchPath(""));
@@ -89,7 +89,7 @@ void draw()
     //int[] input = Arrays.stream(val.split(",")).mapToInt(Integer::parseInt).toArray(); //won'trun on version of processing for pi
     
     String[] arr = val.split(",");
-    int[] input = {0, 0, 0, 0, 0};
+    int[] input = {0, 0,d 0, 0, 0};
     for(int i = 0; i < 5; i++)
     {
         input[i] = parseInt(arr[i]);
@@ -156,9 +156,9 @@ void draw()
     
     
     //uncomment next 2 lines for 5inch hdmi screen
-    //strokeWeight(4);
-    //stroke(255, 255, 255);
-    noStroke(); //comment this out if using 5inch hdmi screen
+    strokeWeight(4);
+    stroke(255, 255, 255);
+    //noStroke(); //comment this out if using 5inch hdmi screen
     colorMode(HSB, 255);
     
     for(int i = 0; i < n; i++)
