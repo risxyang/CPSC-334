@@ -21,7 +21,7 @@ int light1 = 34;
 int light2 = 35;
 int light3 = 32;
 int light4 = 33;
-int vib = 25;
+int vib = 4;
 
 const uint16_t port = 8091;
 const char * host = "172.29.30.152";
