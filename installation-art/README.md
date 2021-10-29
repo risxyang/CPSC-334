@@ -14,7 +14,7 @@ https://vimeo.com/639834601
 - ESP32
 - Solderless breadboard, wires, resistors
 - Piezoelectric sensor
-- <a href="https://www.bareconductive.com/blogs/resources/make-a-basic-capacitive-sensor-with-electric-paint-and-arduino">DIY Capacitative Touch Sensor</a>
+- <a href="https://www.bareconductive.com/blogs/resources/make-a-basic-capacitive-sensor-with-electric-paint-and-arduino">DIY Capacitive Touch Sensor</a>
 - 4 ambient light sensors
 - Enclosure (wooden cube + stand)
 - For visual output: either a Raspberry Pi + Projector or some HDMI display
@@ -47,7 +47,7 @@ This will run your code without needing the processing editor, and can be done o
 
 (Otherwise, you can simply run the mac version of this program in the editor on your machine -- this will probably work just fine on other systems too, dependent on the version of processing installed-- I have not tested this).
 
-Finally, you'll also want to download the Arduino IDE so you can compile and upload code which handles sensor input to an ESP32. In the wifi_arduino directory is an .ino file, in which you can define your GPIO pin setup and the IP address of a server to which your ESP32 will send the sensor information. You will want to install the <a href="https://playground.arduino.cc/Main/CapacitiveSensor/">capacitative sensor library.</a> 
+Finally, you'll also want to download the Arduino IDE so you can compile and upload code which handles sensor input to an ESP32. In the wifi_arduino directory is an .ino file, in which you can define your GPIO pin setup and the IP address of a server to which your ESP32 will send the sensor information. You will want to install the <a href="https://playground.arduino.cc/Main/CapacitiveSensor/">capacitive sensor library.</a> 
 - If this creates strange errors on compile, you may have to edit the .h file for the library to include the <b> #elif defined(ARDUINO_ARCH_ESP32) </b> section in <a href="https://github.com/PaulStoffregen/OneWire/blob/master/util/OneWire_direct_gpio.h">this header file.</a> This fix was proposed <a href="https://github.com/PaulStoffregen/CapacitiveSensor/issues/24">here.</a>
 
 In this directory is a server.py file you will need to receive sensor data on your machine. Update the IP address to which you are binding the socket to that of your machine. The server writes to a text file which is read by Processing to get the most recent batch of sensor data. Sensor data comes in the form of analog reads of:
@@ -55,8 +55,8 @@ In this directory is a server.py file you will need to receive sensor data on yo
 - [current sum of all light sensor values]
 - [average piezosensor value at initialization, over 10 successive reads]
 - [current piezosensor value]
-- [average capacitative touch sensor value at initialization, over 10 successive reads]
-- [current capacitative touch sensor value]
+- [average capacitive touch sensor value at initialization, over 10 successive reads]
+- [current capacitive touch sensor value]
 
 This setup allows tracking of deviation from the initial state of sensor values, which are set immediately after boot.
 
