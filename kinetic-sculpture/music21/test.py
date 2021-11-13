@@ -7,6 +7,10 @@ import math
 
 start = time.time() 
 
+noteFreq = {
+
+}
+
 noteIndex = {
     "C":1,
     "C#":2,
@@ -31,6 +35,20 @@ noteIndex = {
 arduino = serial.Serial(port='/dev/cu.SLAB_USBtoUART', baudrate=115200, timeout=.1)
 def write(x):
     arduino.write(x.encode("utf-8"))
+
+
+# sc = serial.Serial(port='/dev/cu.SLAB_USBtoUART', baudrate=9600, timeout=.1)
+# def writeSC(x):
+#     sc.write(x.encode("utf-8"))
+
+#SUPERCOLLIDER
+import pyOSC3
+client = pyOSC3.OSCClient()
+client.connect( ( '127.0.0.1', 57120 ) )
+msg = pyOSC3.OSCMessage()
+msg.setAddress("/print")
+msg.append(440)
+client.send(msg)
 
 
 fp = 'ballade1.mid'
@@ -93,6 +111,7 @@ for i,m in enumerate(measures):
 
             # print(s_ang, e_ang, w_ang)
             write(str(dur) + "," + str(int_inrange(s_ang, 180, 3000)) + "," + str(int_inrange(e_ang, 180, 3000)) + "," + str(int_inrange(w_ang, 180, 3000)) + "\n")
+            writeSC(1)
         elif 'Chord' in elem.classes:
             # pitchstr = ''
             # for pitch in elem.pitches:
