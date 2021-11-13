@@ -74,9 +74,9 @@ ind3 = x.indexOf(',', ind2+1 );
 elbowPos = x.substring(ind2+1, ind3+1).toInt();
 wristPos =  x.substring(ind3+1).toInt(); 
 
-//shoulder.writeMicroseconds(shoulderPos);
-//elbow.writeMicroseconds(elbowPos);
-//wrist.writeMicroseconds(wristPos);
+shoulder.writeMicroseconds(shoulderPos);
+elbow.writeMicroseconds(elbowPos);
+wrist.writeMicroseconds(wristPos);
 
 //n = 10; //delay segmentation
 //double d = durMS / n;
