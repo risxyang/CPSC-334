@@ -11,6 +11,9 @@ Servo wrist;
 int wristPos = 0;    // variable to store the servo position
 int elbowPos = 0; 
 int shoulderPos = 0; 
+int newWristPos;
+int newElbowPos;
+int newShoulderPos;
 
 bool decShoulder = false;
 bool decElbow = false;
@@ -24,6 +27,11 @@ int shoulderPin = 16;
 
 //input read
 String x;
+int ind1; 
+int ind2;
+int ind3;
+int ind4;
+
 
 void setup() {
  Serial.begin(115200);
@@ -44,27 +52,37 @@ void setup() {
   wrist.setPeriodHertz(50);    // standard 50 hz servo
   wrist.attach(wristPin, 500, 2400); // attaches the servo on pin to the servo object
 
+  shoulder.writeMicroseconds(0);
+  elbow.writeMicroseconds(0);
+  wrist.writeMicroseconds(0);
   
 }
 void loop() {
  while (!Serial.available());
  x = Serial.readStringUntil('\n');
-// Serial.print(x + 1);
-  Serial.println(x);
-  if(String(x[0]).toInt() == 0)
-  {
-    //note
-    Serial.println("note");
-  }
-  else if(String(x[0]).toInt() == 1)
-  {
-    //chord
-    Serial.println("chord");
-  
-  }
-  else if(String(x[0]).toInt() == 2)
-  {
-    //rest
-    Serial.println("rest");
-  }
+ Serial.println(x);
+
+// read duration
+ind1 = x.indexOf(',');  //finds location of first ,
+double dur = x.substring(0, ind1).toDouble();   //captures first data String
+int durMS = (int)(dur * 1000.0);
+
+ind2 = x.indexOf(',', ind1+1 );
+shoulderPos = x.substring(ind1+1, ind2+1).toInt();
+
+ind3 = x.indexOf(',', ind2+1 );
+elbowPos = x.substring(ind2+1, ind3+1).toInt();
+wristPos =  x.substring(ind3+1).toInt(); 
+
+shoulder.writeMicroseconds(shoulderPos);
+elbow.writeMicroseconds(elbowPos);
+wrist.writeMicroseconds(wristPos);
+
+//n = 10; //delay segmentation
+//double d = durMS / n;
+//if (newShoulderPos < shoulderPos)
+//{
+//  for (int sp = shoulderPos; sp
+//}
+
 }

@@ -58,6 +58,12 @@ def get_elbow_angle_from_shoulder_angle(s_ang, note_index):
         e_ang = 0.0
     return e_ang
 
+def int_inrange(x, old_upper, new_upper):
+    newx = round(x * new_upper / old_upper)
+    return newx
+
+
+
 s_ang = 0.0
 e_ang = 0.0
 w_ang = 0.0
@@ -86,7 +92,7 @@ for i,m in enumerate(measures):
             w_ang = 0.0
 
             # print(s_ang, e_ang, w_ang)
-            write(str(dur) + "," + str(s_ang) + "," + str(e_ang) + "," + str(w_ang) + "\n")
+            write(str(dur) + "," + str(int_inrange(s_ang, 180, 3000)) + "," + str(int_inrange(e_ang, 180, 3000)) + "," + str(int_inrange(w_ang, 180, 3000)) + "\n")
         elif 'Chord' in elem.classes:
             # pitchstr = ''
             # for pitch in elem.pitches:
@@ -107,7 +113,7 @@ for i,m in enumerate(measures):
             s_ang = (90.0 / 7.0) * octave1  #calc shoulder angle
             e_ang = get_elbow_angle_from_shoulder_angle(s_ang, note1_index) #calc elbow angle
             w_ang = 0.0 #calc wrist angle
-            write(str(dur / 2.0) + "," + str(s_ang) + "," + str(e_ang) + "," + str(w_ang) + "\n")
+            write(str(dur / 2.0) + "," + str(int_inrange(s_ang, 180, 3000)) + "," + str(int_inrange(e_ang, 180, 3000)) + "," + str(int_inrange(w_ang, 180, 3000)) + "\n")
             while(1):
                 if(time.time() - currtime > (dur / 2.0)):
                     break
@@ -115,7 +121,7 @@ for i,m in enumerate(measures):
             s_ang = (90.0 / 7.0) * octave2  #calc shoulder angle
             e_ang = get_elbow_angle_from_shoulder_angle(s_ang, note2_index) #calc elbow angle
             w_ang = 0.0 #calc wrist angle
-            write(str(dur / 2.0) + "," + str(s_ang) + "," + str(e_ang) + "," + str(w_ang) + "\n")
+            write(str(dur / 2.0) + "," + str(int_inrange(s_ang, 180, 3000)) + "," + str(int_inrange(e_ang, 180, 3000)) + "," + str(int_inrange(w_ang, 180, 3000)) + "\n")
 
             #1, noteindex1, octave#1, noteindex2, octave#2
             #write("1," + str(noteIndex[elem.pitches[0].name]) + "," + str(elem.pitches[0].octave) + "," + str(noteIndex[elem.pitches[n-1].name]) + "," + str(elem.pitches[n-1].octave) + "\n")
@@ -123,7 +129,7 @@ for i,m in enumerate(measures):
         elif 'Rest' in elem.classes:
             # write("2" + "\n")
             w_ang = 80.0
-            write(str(dur) + "," + str(s_ang) + "," + str(e_ang) + "," + str(w_ang) + "\n")
+            write(str(dur) + "," + str(int_inrange(s_ang, 180, 3000)) + "," + str(int_inrange(e_ang, 180, 3000)) + "," + str(int_inrange(w_ang, 180, 3000)) + "\n")
         
         # print(elem, elem.duration.quarterLength * (60.0 / bpm))
         # print(elem)
