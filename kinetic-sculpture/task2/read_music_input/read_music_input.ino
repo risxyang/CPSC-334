@@ -90,7 +90,7 @@ void loop() {
     }
 
     
-    Serial.println(state, DEC);
+//    Serial.println(state, DEC);
     t = millis();
  
 
@@ -111,11 +111,11 @@ void loop() {
     }
 
     
-    Serial.println(state, DEC);
+//    Serial.println(state, DEC);
     t = millis();
  }
  x = Serial.readStringUntil('\n');
-// Serial.println(x);
+ Serial.println(x);
 
 // read duration
 ind1 = x.indexOf(',');  //finds location of first ,

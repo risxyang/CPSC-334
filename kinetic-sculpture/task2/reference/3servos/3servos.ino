@@ -104,14 +104,14 @@ void loop() {
   }
 
 
-  if (wristPos < 45 && decWrist == false)
+  if (wristPos < 180 && decWrist == false)
   {
     wristPos += 1;
-    wrist.write(elbowPos);
+    wrist.write(wristPos);
        delay(10);
 
   } //unless you've rotated 180 degrees already, then go back to position 0 degrees
-  else if(wristPos >= 45 && decWrist == false)
+  else if(wristPos >= 180 && decWrist == false)
   {
       decWrist = true;
        
