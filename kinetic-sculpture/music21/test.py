@@ -8,6 +8,11 @@ import requests
 import lxml
 import lxml.html as lh
 import pandas as pd
+# from gpiozero import Button
+import sys
+
+
+# button = Button(13) #switch
 
 start = time.time() 
 
@@ -54,7 +59,7 @@ for T in tr_elements[1:]:
                 noteFreq[key2] = value
         col += 1
 
-print(noteFreq)
+# print(noteFreq)
 
 noteIndex = {
     "C":1,
@@ -76,8 +81,8 @@ noteIndex = {
     "B":12
 }
 
-
-arduino = serial.Serial(port='/dev/cu.SLAB_USBtoUART', baudrate=115200, timeout=.1)
+br = 115200
+arduino = serial.Serial(port='/dev/cu.SLAB_USBtoUART', baudrate=br, timeout=.1)
 def write(x):
     arduino.write(x.encode("utf-8"))
 
@@ -102,7 +107,7 @@ def writeSC(x):
     client.send(msg)
 
 
-fp = 'ballade1.mid'
+fp = 'ballade4.mid'
 mf = midi.MidiFile()
 mf.open(fp)
 mf.read()
@@ -132,20 +137,38 @@ def int_inrange(x, old_upper, new_upper):
     return newx
 
 
+def read_switch_val():
+    data = arduino.read(1)
+    data += arduino.read(arduino.inWaiting())
+    switch = data.decode('utf-8').strip()
+    return switch
 
 s_ang = 0.0
 e_ang = 0.0
 w_ang = 0.0
+writeSC(0)
+
+
 
 for i,m in enumerate(measures):
+    # data = arduino.read(1)
+    # data+= arduino.read(arduino.inWaiting())
+    # switch = data.decode('utf-8')
+    # sys.stdout.flush()
+    # print(switch)
+    # if button.is_pressed:
+    #     while(1):
+    #         if not button.is_pressed:
+    #             break
     v =  m.getElementsByClass(stream.Voice)
     if len(v) > 0:
         m = v[0]
     for elem in m:
+        #check for interruptions
         currtime = time.time()
         #duration in seconds
         dur = elem.duration.quarterLength * (60.0 / bpm)
-
+        switch = read_switch_val()
         if 'tempo' in elem.classes or 'MetronomeMark' in elem.classes:
             bpm = elem.number
             print(bpm)
@@ -153,12 +176,13 @@ for i,m in enumerate(measures):
             #0, noteindex, octave #
             # write("0," + str(noteIndex[elem.name]) + "," + str(elem.octave) + "\n")
 
-            #calc shoulder angle
-            s_ang = (90.0 / 7.0) * elem.octave
-            #calc elbow angle
-            e_ang = get_elbow_angle_from_shoulder_angle(s_ang, noteIndex[elem.name])
-            #calc wrist angle
-            w_ang = 0.0
+            if len(switch) > 0 and int(switch[0]) == 1:
+                #calc shoulder angle
+                s_ang = (90.0 / 7.0) * elem.octave
+                #calc elbow angle
+                e_ang = get_elbow_angle_from_shoulder_angle(s_ang, noteIndex[elem.name])
+                #calc wrist angle
+                w_ang = 0.0
 
             # print(s_ang, e_ang, w_ang)
             write(str(dur) + "," + str(int_inrange(s_ang, 180, 3000)) + "," + str(int_inrange(e_ang, 180, 3000)) + "," + str(int_inrange(w_ang, 180, 3000)) + "\n")
@@ -179,19 +203,22 @@ for i,m in enumerate(measures):
             note2_index = noteIndex[elem.pitches[n-1].name]
             octave2 = elem.pitches[n-1].octave
 
+            if len(switch) > 0 and int(switch[0]) == 1:
             #first set of angles
-            s_ang = (90.0 / 7.0) * octave1  #calc shoulder angle
-            e_ang = get_elbow_angle_from_shoulder_angle(s_ang, note1_index) #calc elbow angle
-            w_ang = 0.0 #calc wrist angle
+                s_ang = (90.0 / 7.0) * octave1  #calc shoulder angle
+                e_ang = get_elbow_angle_from_shoulder_angle(s_ang, note1_index) #calc elbow angle
+                w_ang = 0.0 #calc wrist angle
             write(str(dur / 2.0) + "," + str(int_inrange(s_ang, 180, 3000)) + "," + str(int_inrange(e_ang, 180, 3000)) + "," + str(int_inrange(w_ang, 180, 3000)) + "\n")
             writeSC(noteFreq[str(elem.pitches[0].name) + str(elem.pitches[0].octave)]) 
             while(1):
                 if(time.time() - currtime > (dur / 2.0)):
                     break
+            
+            if len(switch) > 0 and int(switch[0]) == 1:
             #second set of angles
-            s_ang = (90.0 / 7.0) * octave2  #calc shoulder angle
-            e_ang = get_elbow_angle_from_shoulder_angle(s_ang, note2_index) #calc elbow angle
-            w_ang = 0.0 #calc wrist angle
+                s_ang = (90.0 / 7.0) * octave2  #calc shoulder angle
+                e_ang = get_elbow_angle_from_shoulder_angle(s_ang, note2_index) #calc elbow angle
+                w_ang = 0.0 #calc wrist angle
             write(str(dur / 2.0) + "," + str(int_inrange(s_ang, 180, 3000)) + "," + str(int_inrange(e_ang, 180, 3000)) + "," + str(int_inrange(w_ang, 180, 3000)) + "\n")
             writeSC(noteFreq[str(elem.pitches[n-1].name) + str(elem.pitches[n-1].octave)])
 
@@ -200,9 +227,11 @@ for i,m in enumerate(measures):
 
         elif 'Rest' in elem.classes:
             # write("2" + "\n")
-            w_ang = 80.0
+            if len(switch) > 0 and int(switch[0]) == 1:
+                w_ang = 80.0
             write(str(dur) + "," + str(int_inrange(s_ang, 180, 3000)) + "," + str(int_inrange(e_ang, 180, 3000)) + "," + str(int_inrange(w_ang, 180, 3000)) + "\n")
-        
+            # writeSC(0)
+
         # print(elem, elem.duration.quarterLength * (60.0 / bpm))
         # print(elem)
         while(1):

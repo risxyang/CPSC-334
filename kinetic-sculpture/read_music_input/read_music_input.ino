@@ -1,6 +1,19 @@
 
 #include <ESP32Servo.h>
 
+//physical input
+int Switch = 13;
+int reading;           // the current reading from the input pin
+int previous = LOW;    // the previous reading from the input pin
+int state = 0;      // the current state of the output
+
+// the follow variables are long's because the time, measured in miliseconds,
+// will quickly become a bigger number than can be stored in an int.
+long t = 0;         // the last time the output pin was toggled
+long debounce = 300;   // the debounce time, increase if the output flickers
+
+
+
 //SERVO 
 
 Servo shoulder;  // create servo object to control a servo
@@ -35,7 +48,11 @@ int ind4;
 
 void setup() {
  Serial.begin(115200);
+
+ pinMode(Switch, INPUT);
+ 
  Serial.setTimeout(2);
+ 
 
   // Allow allocation of all timers
   ESP32PWM::allocateTimer(0);
@@ -58,9 +75,47 @@ void setup() {
   
 }
 void loop() {
- while (!Serial.available());
+
+ int reading = digitalRead(Switch);
+// Serial.println(reading, DEC);
+ if (reading == 1 && previous == LOW && millis() - t > debounce) 
+    {
+      state = 1;
+      previous = HIGH;
+    }
+    else if(reading == 0 && previous == HIGH && millis() - t > debounce)
+    {
+      state = 0;
+      previous = LOW;
+    }
+
+    
+    Serial.println(state, DEC);
+    t = millis();
+ 
+
+  
+ while (!Serial.available())
+ {
+   int reading = digitalRead(Switch);
+// Serial.println(reading, DEC);
+ if (reading == 1 && previous == LOW && millis() - t > debounce) 
+    {
+      state = 1;
+      previous = HIGH;
+    }
+    else if(reading == 0 && previous == HIGH && millis() - t > debounce)
+    {
+      state = 0;
+      previous = LOW;
+    }
+
+    
+    Serial.println(state, DEC);
+    t = millis();
+ }
  x = Serial.readStringUntil('\n');
- Serial.println(x);
+// Serial.println(x);
 
 // read duration
 ind1 = x.indexOf(',');  //finds location of first ,
