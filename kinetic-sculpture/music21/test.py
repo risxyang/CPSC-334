@@ -107,7 +107,7 @@ def writeSC(x):
     client.send(msg)
 
 
-fp = 'ballade4.mid'
+fp = 'ballade1.mid'
 mf = midi.MidiFile()
 mf.open(fp)
 mf.read()
@@ -186,15 +186,16 @@ for i,m in enumerate(measures):
 
             # print(s_ang, e_ang, w_ang)
             write(str(dur) + "," + str(int_inrange(s_ang, 180, 3000)) + "," + str(int_inrange(e_ang, 180, 3000)) + "," + str(int_inrange(w_ang, 180, 3000)) + "\n")
-            writeSC(noteFreq[str(elem.name) + str(elem.octave)])
+            writeSC("1,"+ str(dur) + "," + str(noteFreq[str(elem.name) + str(elem.octave)]))
         elif 'Chord' in elem.classes:
-            # pitchstr = ''
-            # for pitch in elem.pitches:
-            #     if pitchstr == '':
-            #         pitchstr += str(noteIndex[pitch.name]) + ":" + str(pitch.octave)
-            #     else:
-            #         pitchstr += "," + pitch.name + ":" + str(pitch.octave)
+            pitchstr = ''
+            for pitch in elem.pitches:
+                if pitchstr == '':
+                    pitchstr += str(noteFreq[str(pitch.name) + str(pitch.octave)])
+                else:
+                    pitchstr += "," + str(noteFreq[str(pitch.name) + str(pitch.octave)])
             # write("1," + str(len(elem.pitches)) + ",'" + pitchstr + "\n")
+            writeSC(str(len(elem.pitches)) + "," + str(dur) + "," + pitchstr)
 
             #for this version of the program: send the lowest and highest notes within the chord
             n = len(elem.pitches)
@@ -209,7 +210,7 @@ for i,m in enumerate(measures):
                 e_ang = get_elbow_angle_from_shoulder_angle(s_ang, note1_index) #calc elbow angle
                 w_ang = 0.0 #calc wrist angle
             write(str(dur / 2.0) + "," + str(int_inrange(s_ang, 180, 3000)) + "," + str(int_inrange(e_ang, 180, 3000)) + "," + str(int_inrange(w_ang, 180, 3000)) + "\n")
-            writeSC(noteFreq[str(elem.pitches[0].name) + str(elem.pitches[0].octave)]) 
+            # writeSC(noteFreq[str(elem.pitches[0].name) + str(elem.pitches[0].octave)]) 
             while(1):
                 if(time.time() - currtime > (dur / 2.0)):
                     break
@@ -220,7 +221,7 @@ for i,m in enumerate(measures):
                 e_ang = get_elbow_angle_from_shoulder_angle(s_ang, note2_index) #calc elbow angle
                 w_ang = 0.0 #calc wrist angle
             write(str(dur / 2.0) + "," + str(int_inrange(s_ang, 180, 3000)) + "," + str(int_inrange(e_ang, 180, 3000)) + "," + str(int_inrange(w_ang, 180, 3000)) + "\n")
-            writeSC(noteFreq[str(elem.pitches[n-1].name) + str(elem.pitches[n-1].octave)])
+            # writeSC(noteFreq[str(elem.pitches[n-1].name) + str(elem.pitches[n-1].octave)])
 
             #1, noteindex1, octave#1, noteindex2, octave#2
             #write("1," + str(noteIndex[elem.pitches[0].name]) + "," + str(elem.pitches[0].octave) + "," + str(noteIndex[elem.pitches[n-1].name]) + "," + str(elem.pitches[n-1].octave) + "\n")
