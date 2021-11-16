@@ -1,4 +1,4 @@
-# Module 4 Project for CPSC 334: Creative Embedded Systems #
+# Module 4/5 Task 2 for CPSC 334: Creative Embedded Systems #
 
 An abstract-art-generating-midi-sound-file-visualizing-brachiograph-program
 
@@ -22,6 +22,7 @@ Materials:
 - 1 Pen (or other writing, drawing, painting tools)
 - Enclosure (plastic project box)
 - Laptop to run Supercollider, if you want audio 
+
 
 Under /read_music_input is an .ino file, in which you can define your preferred GPIO setup for the three servo motors; this script has been tested with an ESP32.
 
