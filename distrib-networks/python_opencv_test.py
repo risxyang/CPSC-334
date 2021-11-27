@@ -2,7 +2,7 @@ import cv2
 import os
 
 
-cv2.namedWindow("preview")
+# cv2.namedWindow("preview")
 # cv2.namedWindow("preview", cv2.WND_PROP_FULLSCREEN)
 # cv2.setWindowProperty("preview", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
@@ -21,7 +21,7 @@ while rval:
     os.system('echo '+ msg + '> dims')
 
     # Detect faces
-    faces = face_cascade.detectMultiScale(gray, 1.1, 4)
+    faces = face_cascade.detectMultiScale(gray, 1.5, 4)
 
     msg = ""
     msg += str(len(faces)) + ","
@@ -33,11 +33,11 @@ while rval:
     os.system('echo '+ msg + '> faceread')
     
 
-    cv2.imshow("preview", frame)
+    # cv2.imshow("preview", frame)
     rval, frame = vc.read()
     key = cv2.waitKey(20)
     if key == 27: # exit on ESC
         break
 
 vc.release()
-cv2.destroyWindow("preview")
+# cv2.destroyWindow("preview")
