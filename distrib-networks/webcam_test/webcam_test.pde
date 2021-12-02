@@ -104,6 +104,12 @@ void draw() {
      x = 0;
     }
     
+   //now do it again with the face area
+    
+    for(int j = 1; j < (4 * nFaces) + 1; j+= 4)
+    {
+    }
+
  
     for(int j = 1; j < (4 * nFaces) + 1; j+= 4)
     {
