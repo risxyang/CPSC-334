@@ -5,6 +5,10 @@ float speed;
 int changeX;
 int changeY;
 
+int s = second(); //0-59
+
+light lightfield;
+
 void setup() {
   //size(600, 600);
   fullScreen();
@@ -13,6 +17,8 @@ void setup() {
   for (int i = 0; i < stars.length; i++) {
     stars[i] = new Star();
   }
+  
+  lightfield = new light();
 }
 
 void draw() {
@@ -40,6 +46,10 @@ void draw() {
  
   rect(-displayWidth/2, -displayHeight/2, xOffset, displayHeight);
   rect(displayWidth - xOffset - displayWidth/2, -displayHeight/2, displayWidth, displayHeight);
+  
+  
+  lightfield.update();
+  lightfield.show();
  
  translate(changeX, changeY);
  //rect(0, 0, xOffset, displayHeight);
