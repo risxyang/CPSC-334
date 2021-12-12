@@ -42,8 +42,7 @@ void draw() {
  //add borders to make this a square
  int xOffset = (displayWidth - displayHeight) / 2;
  
- fill(0,0,0);
- 
+  fill(0,0,0);
   rect(-displayWidth/2, -displayHeight/2, xOffset, displayHeight);
   rect(displayWidth - xOffset - displayWidth/2, -displayHeight/2, displayWidth, displayHeight);
   

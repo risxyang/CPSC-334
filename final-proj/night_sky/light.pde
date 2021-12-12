@@ -7,7 +7,9 @@ class light
   int r;
   int g;
   int b;
-  dapple[] dapples = new dapple[25];
+  dapple[] dapples = new dapple[30];
+  
+  PImage dappleImg = loadImage("bokeh.png");
   
   light()
   {
@@ -19,7 +21,7 @@ class light
     b = 70;
     
     for (int i = 0; i < dapples.length; i++) {
-      dapples[i] = new dapple(w);
+      dapples[i] = new dapple(w, dappleImg);
     }
   }
   
@@ -40,6 +42,18 @@ class light
     for (int i = 0; i < dapples.length; i++) {
     dapples[i].show();
   }
+  
+  blendMode(NORMAL);
+  
+  //draw border
+  int xOffset = (int)((displayWidth - w) / 2);
+  int yOffset = (int)((displayHeight - w) / 2);
+  fill(0,0,0);
+  rect(-displayWidth/2, -displayHeight/2, xOffset, displayHeight);
+  rect(displayWidth - xOffset - displayWidth/2, -displayHeight/2, displayWidth, displayHeight);
+  rect(-displayWidth/2, -displayHeight/2, displayWidth, yOffset);
+  rect(-displayWidth/2, displayHeight/2 - yOffset, displayWidth, displayHeight); 
+  
   }
  
   

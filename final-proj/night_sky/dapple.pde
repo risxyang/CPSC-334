@@ -4,12 +4,17 @@ class dapple {
   float x;
   float y;
   float dw;
+  PImage img;
 
-  dapple(float lw) {
+  dapple(float lw, PImage dappleImg) {
     dw = lw;
-    x = random(-dw/2, dw/2);
-    y = random(-dw/2, dw/2);
+    dw = 140;
+    x = random(-dw*1.5, dw/2);
+    y = random(-dw*1.5, dw/2);
+    img = dappleImg;
+    img.resize((int)random(dw-10,dw), (int)random(dw-10,dw));
   }
+ 
 
   void show() {
     
@@ -17,7 +22,10 @@ class dapple {
     fill(100,100,0);
     noStroke();
 
-    ellipse(x, y, random(60,68), random(60,68));
+    //ellipse(x, y, random(60,68), random(60,68));
+    x += random(-2, 2);
+    y += random(-2,2);
+    image(img, x, y);
     
     //filter(BLUR, 10);
 
