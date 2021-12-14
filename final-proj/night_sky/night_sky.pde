@@ -4,12 +4,16 @@ Star[] stars = new Star[800];
 float speed;
 int changeX;
 int changeY;
+String dir;
 int dirX = 0;
 int dirY = 0;
 
 int s = second(); //0-59
 
 light lightfield;
+bird birdy;
+
+//PImage birdImage;
 
 void setup() {
   //size(600, 600);
@@ -21,6 +25,11 @@ void setup() {
   }
   
   lightfield = new light();
+  birdy = new bird();
+  dir = "N";
+  
+  //birdImage = loadImage("bird.png");
+  //birdImage.resize(500,500);
 }
 
 void draw() {
@@ -69,7 +78,6 @@ void draw() {
     
     if (minVal < 1500)
     {
-      String dir = "";
       dirX = 0;
       dirY = 0;
       switch(minIndex)
@@ -115,6 +123,7 @@ void draw() {
           break;
       }
       
+      //birdy.update(dir);
       println(dir);
     }
   }
@@ -148,10 +157,16 @@ void draw() {
   
   //lightfield.update();
   //lightfield.show();
- 
+  
+ //image(birdImage, -displayWidth/5 ,-displayHeight/5);
+ birdy.update(dir);
+ birdy.show();
+  
  translate(changeX, changeY);
  //rect(0, 0, xOffset, displayHeight);
  //rect(displayWidth - xOffset, 0, displayWidth, displayHeight);
+ 
+
  
 
  
