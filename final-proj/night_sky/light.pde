@@ -37,11 +37,12 @@ class light
   
   void show()
   {
+    translate(displayWidth/2, displayHeight/2);
     fill(c);
     rect(lx, ly, w, w);
     for (int i = 0; i < dapples.length; i++) {
     dapples[i].show();
-  }
+    }
   
   blendMode(NORMAL);
   

@@ -90,7 +90,7 @@ class bird {
          frameIndex = (frameIndex + 1) % 6;
        }
     }
-    else //is currently flapping
+    if(isFlapping) //is currently flapping
     {
         image(flapFrames[frameIndex], -displayWidth/5 ,-displayHeight/5);
         if(frameIndex == 8 && (flapCount > (int)random(2,5)))

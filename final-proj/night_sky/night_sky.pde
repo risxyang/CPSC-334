@@ -130,39 +130,49 @@ void draw() {
   
   // i link the value of the speed variable to the mouse position.
   //speed = map(mouseX, 0, width, 0, 50);
-
-  background(0);
-  // I shift the entire composition,
-  // moving its center from the top left corner to the center of the canvas.
-  translate(width/2, height/2);
-  //changeX = (int)((mouseX - (displayWidth / 2)) * 0.02);
-  //changeY = (int)((mouseY - (displayHeight / 2)) * 0.02);
-  changeX = dirX * 4;
-  changeY = dirY * -4;
-  // I draw each star, running the "update" method to update its position and
-  // the "show" method to show it on the canvas.
-  for (int i = 0; i < stars.length; i++) {
-    stars[i].update();
-    stars[i].show();
+  
+  if(second() < 30)
+  {
+  
+    background(0);
+    // I shift the entire composition,
+    // moving its center from the top left corner to the center of the canvas.
+    translate(width/2, height/2);
+    //changeX = (int)((mouseX - (displayWidth / 2)) * 0.02);
+    //changeY = (int)((mouseY - (displayHeight / 2)) * 0.02);
+    changeX = dirX * 4;
+    changeY = dirY * -4;
+    // I draw each star, running the "update" method to update its position and
+    // the "show" method to show it on the canvas.
+    for (int i = 0; i < stars.length; i++) {
+      stars[i].update();
+      stars[i].show();
+    }
+    delay(50);
+   
+   //add borders to make this a square
+   int xOffset = (displayWidth - displayHeight) / 2;
+   
+    fill(0,0,0);
+    rect(-displayWidth/2, -displayHeight/2, xOffset, displayHeight);
+    rect(displayWidth - xOffset - displayWidth/2, -displayHeight/2, displayWidth, displayHeight);
+    
   }
-  delay(50);
- 
- //add borders to make this a square
- int xOffset = (displayWidth - displayHeight) / 2;
- 
-  fill(0,0,0);
-  rect(-displayWidth/2, -displayHeight/2, xOffset, displayHeight);
-  rect(displayWidth - xOffset - displayWidth/2, -displayHeight/2, displayWidth, displayHeight);
-  
-  
-  //lightfield.update();
-  //lightfield.show();
-  
+  translate(changeX, changeY);
+   
+  if(second() > 30)
+  {
+    lightfield.update();
+    lightfield.show();
+  }
+    
  //image(birdImage, -displayWidth/5 ,-displayHeight/5);
- birdy.update(dir);
- birdy.show();
+ if(second() < 30)
+ {
+    birdy.update(dir);
+    birdy.show();
+ }
   
- translate(changeX, changeY);
  //rect(0, 0, xOffset, displayHeight);
  //rect(displayWidth - xOffset, 0, displayWidth, displayHeight);
  
