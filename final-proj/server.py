@@ -20,7 +20,7 @@ while True:
     # now do something with the clientsocket
     content = cs.recv(1024).decode("utf-8")
     print(content)
-    os.system('echo '+ content + '> wifiread')
+    os.system('echo '+ content + '> /home/pi/sketchbook/sketches/wifiread')
     # cs.send(content.encode())
     content = 0
 client.close()

@@ -59,14 +59,14 @@
   for(int i = 0; i < 255; i++)
   {
     RGB_Color(i, i, 0);
-    RGB_Color_2(255-i, 0, i);
+    RGB_Color_2(255-i, 255-i, i);
     RGB_Color_3(i, 0, i);
     delay(50);
   }
   for(int i = 255; i > 0; i--)
   {
     RGB_Color(i,i, 0);
-    RGB_Color_2(255-i, 0, i);
+    RGB_Color_2(255-i, 255-i, i);
     RGB_Color_3(i, 0, i);
     delay(50);
   }
