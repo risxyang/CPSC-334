@@ -7,7 +7,7 @@ https://vimeo.com/659132921
 
 
 <p align="center">
-<img src="https://github.com/risxyang/CPSC-334/blob/main/final-proj/img.jpg" width="450px" height ="auto" alt="3 layered projections, one greyscale pixellated, one in green and blue waves, and one in ASCII pixellation with the red words 'I SEE YOU'">
+<img src="https://github.com/risxyang/CPSC-334/blob/main/distrib-networks/img.jpg" width="450px" height ="auto" alt="3 layered projections, one greyscale pixellated, one in green and blue waves, and one in ASCII pixellation with the red words 'I SEE YOU'">
 </p>
 
 
